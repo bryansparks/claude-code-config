@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/lint-on-save.sh '{{file_path}}' 'write'"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/complexity-check.sh '{{file_path}}'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/lint-on-save.sh '{{file_path}}' 'edit'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/auto-test-runner.sh '{{file_path}}' 'write'"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/commit-message-helper.sh '{{file_path}}' 'write'"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/dependency-check.sh '{{file_path}}'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/auto-test-runner.sh '{{file_path}}' 'edit'"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/load-project-context.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "vision_doc_support": {
+    "enabled": true,
+    "auto_load": true,
+    "session_hook": "load-project-context.sh",
+    "commands": [
+      "create-vision-doc",
+      "update-vision",
+      "validate-vision",
+      "implement"
+    ],
+    "focus_areas": [
+      "Technical architecture and design patterns",
+      "Service layer design and API contracts",
+      "Database schema and data models",
+      "Code organization and structure",
+      "Testing strategy and coverage",
+      "Performance and scalability targets",
+      "CI/CD pipeline and deployment"
+    ],
+    "templates": {
+      "vision_doc": "engineer-vision-template.md",
+      "architecture": "architecture-template.md"
+    }
+  },
+  "model": "sonnet"
+}

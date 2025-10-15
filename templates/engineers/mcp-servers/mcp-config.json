@@ -1,0 +1,187 @@
+{
+  "description": "MCP Server Configuration for Software Engineers - Optimized Bundle",
+  "version": "2.3.0",
+  "persona": "software-engineer",
+  "bundle_size": 7,
+  "servers": {
+    "serena": {
+      "enabled": true,
+      "priority": 1,
+      "package": "@oraios/serena-mcp",
+      "install_command": "uvx --from git+https://github.com/oraios/serena serena-mcp-server",
+      "description": "LSP-based semantic code navigation (100x better than text search)",
+      "use_cases": [
+        "Navigate large Java/Spring codebases symbolically",
+        "Find all implementations of an interface",
+        "Go to definition across complex dependency injection",
+        "Semantic code search (not keyword matching)",
+        "Symbol-level code editing"
+      ],
+      "languages_supported": [
+        "Java",
+        "Python",
+        "JavaScript",
+        "TypeScript",
+        "Go",
+        "Rust"
+      ],
+      "why_essential": "Only MCP server using Language Server Protocol. Understands code structure, not just text."
+    },
+    "github": {
+      "enabled": true,
+      "priority": 1,
+      "package": "@modelcontextprotocol/server-github",
+      "install_command": "npx -y @modelcontextprotocol/server-github",
+      "description": "GitHub integration for PRs, issues, and code reviews",
+      "use_cases": [
+        "Create pull requests with AI-generated descriptions",
+        "Review PRs and suggest improvements",
+        "Manage issues and project boards",
+        "Search code across repositories",
+        "Automate release management"
+      ],
+      "requires": [
+        "GITHUB_TOKEN"
+      ],
+      "why_essential": "Core to modern development workflow - PRs, issues, CI/CD"
+    },
+    "filesystem": {
+      "enabled": true,
+      "priority": 1,
+      "package": "@modelcontextprotocol/server-filesystem",
+      "install_command": "npx -y @modelcontextprotocol/server-filesystem",
+      "description": "Fast file operations with large file handling",
+      "use_cases": [
+        "Read and write source code files",
+        "Navigate project directory structure",
+        "Search files by pattern",
+        "Sequential reading for large files",
+        "Streaming writes with backup & recovery"
+      ],
+      "why_essential": "Fundamental file I/O for all development tasks"
+    },
+    "memory": {
+      "enabled": true,
+      "priority": 2,
+      "package": "@modelcontextprotocol/server-memory",
+      "install_command": "npx -y @modelcontextprotocol/server-memory",
+      "description": "Persistent context across sessions",
+      "use_cases": [
+        "Remember architecture decisions",
+        "Store project coding patterns",
+        "Retain debugging insights across sessions",
+        "Cache frequently used code snippets",
+        "Navigate large codebases with context"
+      ],
+      "why_recommended": "Dramatically improves context retention for complex projects"
+    },
+    "sequential-thinking": {
+      "enabled": true,
+      "priority": 2,
+      "package": "@modelcontextprotocol/server-sequential-thinking",
+      "install_command": "npx -y @modelcontextprotocol/server-sequential-thinking",
+      "description": "Multi-phase planning for complex tasks",
+      "use_cases": [
+        "Architectural design and system decomposition",
+        "Complex refactoring with dependency analysis",
+        "Multi-step debugging workflows",
+        "Test-driven development cycles",
+        "Migration planning (monolith → microservices)"
+      ],
+      "why_recommended": "Essential for senior-level architectural thinking"
+    },
+    "playwright": {
+      "enabled": true,
+      "priority": 2,
+      "package": "@modelcontextprotocol/server-playwright",
+      "install_command": "npx -y @modelcontextprotocol/server-playwright",
+      "description": "Browser automation and E2E testing",
+      "use_cases": [
+        "Create E2E tests for features",
+        "Automate browser testing across Chrome/Firefox/Safari",
+        "Generate test scripts from user flows",
+        "Debug frontend issues with screenshots",
+        "Performance testing with network interception"
+      ],
+      "why_recommended": "Full-stack engineers need E2E testing capabilities"
+    },
+    "postgres": {
+      "enabled": true,
+      "priority": 2,
+      "package": "@modelcontextprotocol/server-postgres",
+      "install_command": "npx -y @modelcontextprotocol/server-postgres",
+      "description": "Database querying and schema inspection",
+      "use_cases": [
+        "Query database schema (tables, columns, indexes)",
+        "Write and test SQL queries",
+        "Inspect database performance (execution plans)",
+        "Validate data migrations",
+        "Set up test data"
+      ],
+      "requires": [
+        "POSTGRES_CONNECTION_STRING"
+      ],
+      "why_recommended": "Most backend engineers work with PostgreSQL daily",
+      "security_note": "Use read-only database user for safety"
+    }
+  },
+  "installation": {
+    "recommended_order": [
+      "serena",
+      "github",
+      "filesystem",
+      "memory",
+      "sequential-thinking",
+      "playwright",
+      "postgres"
+    ],
+    "install_script": "./install-scripts/install-mcp-engineer.sh",
+    "commands": {
+      "install_all": "./install-scripts/install-mcp-engineer.sh",
+      "install_priority_1_only": "./install-scripts/install-mcp-engineer.sh --priority-1",
+      "install_individual": "npx -y @modelcontextprotocol/server-<name>"
+    },
+    "environment_variables": {
+      "required": {
+        "GITHUB_TOKEN": "GitHub personal access token (repo scope)"
+      },
+      "optional": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://user:pass@localhost:5432/dbname (read-only recommended)"
+      }
+    }
+  },
+  "configuration_tips": {
+    "java_spring_projects": "Serena excels at Spring Boot with dependency injection - understands @Autowired, @Component, etc.",
+    "large_monorepos": "Use Serena for symbol navigation, Filesystem for file operations",
+    "microservices": "Configure Serena per service, use GitHub for cross-repo coordination",
+    "database_work": "PostgreSQL server enables schema inspection and query testing without leaving Claude",
+    "e2e_testing": "Playwright generates tests from natural language descriptions of user flows"
+  },
+  "workflows": {
+    "feature_development": [
+      "1. Use Serena to understand existing code structure",
+      "2. Use Sequential-thinking to plan implementation phases",
+      "3. Use Filesystem to read/write code",
+      "4. Use Playwright to create E2E tests",
+      "5. Use GitHub to create PR"
+    ],
+    "debugging": [
+      "1. Use Serena to find all usages of problematic code",
+      "2. Use Memory to recall similar issues",
+      "3. Use PostgreSQL to verify database state",
+      "4. Use Filesystem to apply fixes"
+    ],
+    "code_review": [
+      "1. Use GitHub to fetch PR",
+      "2. Use Serena to understand changed code context",
+      "3. Use Sequential-thinking to evaluate architectural impact",
+      "4. Use GitHub to post review comments"
+    ]
+  },
+  "optimization_tips": [
+    "Serena is expensive (LSP startup) - keep it running between sessions",
+    "Use Memory to cache architectural decisions and reduce re-explanation",
+    "PostgreSQL server should use read-only user for security",
+    "Playwright tests can be expensive - generate focused tests, not full suites"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "em-toolkit",
+  "version": "1.0.0",
+  "description": "Engineering management toolkit with team performance metrics, sprint planning, technical debt assessment, team coordination, and project health monitoring",
+  "author": {
+    "name": "Bryan Sparks",
+    "email": "bryan@example.com"
+  }
+}

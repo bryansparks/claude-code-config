@@ -1,0 +1,9 @@
+{
+  "name": "qa-toolkit",
+  "version": "1.0.0",
+  "description": "Comprehensive QA engineering toolkit with test automation, accessibility auditing, performance testing, bug analysis, and visual regression testing capabilities",
+  "author": {
+    "name": "Bryan Sparks",
+    "email": "bryan@example.com"
+  }
+}

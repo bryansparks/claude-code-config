@@ -1,0 +1,9 @@
+{
+  "name": "pm-toolkit",
+  "version": "1.0.0",
+  "description": "Product management toolkit with feature analysis, user story creation, RICE prioritization, roadmap planning, and stakeholder communication",
+  "author": {
+    "name": "Bryan Sparks",
+    "email": "bryan@example.com"
+  }
+}

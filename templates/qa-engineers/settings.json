@@ -1,0 +1,335 @@
+{
+  "qa_engineer_config": {
+    "persona": {
+      "name": "QA Engineer",
+      "role": "Quality Assurance and Testing Specialist",
+      "emoji": "🧪",
+      "color": "Test Green (#00C853)",
+      "description": "Expert in test automation, bug analysis, and quality assurance"
+    },
+    "subagents": {
+      "test_automation_specialist": {
+        "emoji": "🤖",
+        "priority": 1,
+        "auto_activate": ["test", "automation", "framework", "playwright", "cypress", "jest"]
+      },
+      "bug_analyst": {
+        "emoji": "🔍",
+        "priority": 2,
+        "auto_activate": ["bug", "issue", "defect", "error", "failure", "reproduce"]
+      },
+      "performance_tester": {
+        "emoji": "⚡",
+        "priority": 3,
+        "auto_activate": ["performance", "load", "stress", "lighthouse", "speed", "optimize"]
+      },
+      "accessibility_auditor": {
+        "emoji": "♿",
+        "priority": 4,
+        "auto_activate": ["accessibility", "a11y", "wcag", "aria", "screen-reader"]
+      },
+      "visual_regression_tester": {
+        "emoji": "👁️",
+        "priority": 5,
+        "auto_activate": ["visual", "screenshot", "regression", "pixel", "diff", "ui"]
+      }
+    },
+    "hooks": {
+      "auto_test_on_change": {
+        "enabled": true,
+        "trigger": "on_file_change",
+        "watch_patterns": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.py"],
+        "exclude_patterns": ["**/node_modules/**", "**/.git/**", "**/dist/**"],
+        "description": "Automatically run affected tests when code changes"
+      },
+      "coverage_reporter": {
+        "enabled": true,
+        "trigger": "on_test_complete",
+        "min_coverage": 80,
+        "report_format": "html",
+        "description": "Generate coverage report after test execution"
+      },
+      "visual_regression_check": {
+        "enabled": true,
+        "trigger": "on_pr",
+        "baseline": "main",
+        "threshold": 0.1,
+        "description": "Run visual regression tests on PR creation"
+      },
+      "accessibility_validator": {
+        "enabled": true,
+        "trigger": "on_pr",
+        "wcag_level": "AA",
+        "tool": "auto",
+        "description": "Validate accessibility on PR"
+      },
+      "test_flakiness_detector": {
+        "enabled": true,
+        "trigger": "weekly",
+        "runs": 10,
+        "threshold": 95,
+        "description": "Detect flaky tests weekly"
+      },
+      "bug_severity_classifier": {
+        "enabled": true,
+        "trigger": "on_bug_report",
+        "auto_classify": true,
+        "description": "Auto-classify bug severity"
+      },
+      "performance_baseline_check": {
+        "enabled": true,
+        "trigger": "on_pr",
+        "baseline_file": ".performance-baseline.json",
+        "regression_tolerance": 10,
+        "description": "Check for performance regressions"
+      }
+    },
+    "testing_frameworks": {
+      "unit": {
+        "javascript": ["jest", "vitest"],
+        "python": ["pytest", "unittest"],
+        "preferred": "jest"
+      },
+      "e2e": {
+        "javascript": ["playwright", "cypress"],
+        "python": ["playwright-python", "selenium"],
+        "preferred": "playwright"
+      },
+      "visual": {
+        "tools": ["playwright", "percy", "chromatic", "backstop"],
+        "preferred": "playwright"
+      },
+      "performance": {
+        "frontend": ["lighthouse", "webpagetest"],
+        "backend": ["k6", "jmeter", "locust"],
+        "preferred": "lighthouse + k6"
+      },
+      "accessibility": {
+        "automated": ["axe-core", "pa11y", "lighthouse"],
+        "screen_readers": ["nvda", "jaws", "voiceover"],
+        "preferred": "axe-core"
+      }
+    },
+    "quality_standards": {
+      "test_coverage": {
+        "critical_code": 95,
+        "business_logic": 85,
+        "ui_components": 75,
+        "utilities": 90,
+        "overall": 80
+      },
+      "performance_budgets": {
+        "lcp": 2500,
+        "fid": 100,
+        "cls": 0.1,
+        "ttfb": 400,
+        "api_p95": 500,
+        "api_p99": 1000
+      },
+      "accessibility": {
+        "standard": "WCAG 2.1 AA",
+        "lighthouse_score": 95,
+        "axe_violations": 0,
+        "keyboard_navigation": "100%"
+      },
+      "visual_regression": {
+        "diff_threshold": 0.1,
+        "max_diff_pixels": 100,
+        "false_positive_rate": 5
+      },
+      "code_quality": {
+        "linting": "required",
+        "type_checking": "required",
+        "security_scan": "required",
+        "dependency_audit": "required"
+      }
+    },
+    "bug_severity_levels": {
+      "P0": {
+        "label": "Critical",
+        "sla_response": "immediate",
+        "sla_fix": "same day",
+        "criteria": ["production down", "data loss", "security breach", "revenue blocked"]
+      },
+      "P1": {
+        "label": "High",
+        "sla_response": "2 hours",
+        "sla_fix": "24 hours",
+        "criteria": ["major feature broken", ">10% users affected", "no workaround"]
+      },
+      "P2": {
+        "label": "Medium",
+        "sla_response": "1 day",
+        "sla_fix": "1 week",
+        "criteria": ["feature partially broken", "workaround exists", "<10% users affected"]
+      },
+      "P3": {
+        "label": "Low",
+        "sla_response": "1 week",
+        "sla_fix": "1 month",
+        "criteria": ["minor issue", "edge case", "minimal impact"]
+      },
+      "P4": {
+        "label": "Trivial",
+        "sla_response": "none",
+        "sla_fix": "when convenient",
+        "criteria": ["cosmetic", "very rare", "no impact"]
+      }
+    },
+    "ci_cd_integration": {
+      "test_on_pr": true,
+      "test_on_push": true,
+      "required_checks": [
+        "unit tests",
+        "integration tests",
+        "linting",
+        "type checking"
+      ],
+      "optional_checks": [
+        "e2e tests",
+        "visual regression",
+        "performance tests",
+        "accessibility audit"
+      ],
+      "failure_action": "block_merge",
+      "notification_channels": ["slack", "github", "email"]
+    },
+    "test_data_management": {
+      "strategy": "factory_functions",
+      "faker_library": true,
+      "database_seeding": true,
+      "cleanup_after_tests": true,
+      "isolation_level": "test"
+    },
+    "reporting": {
+      "formats": ["html", "json", "junit", "lcov"],
+      "coverage_badge": true,
+      "trend_tracking": true,
+      "dashboard": "optional",
+      "notifications": {
+        "test_failure": true,
+        "coverage_drop": true,
+        "flaky_test_detected": true,
+        "performance_regression": true
+      }
+    },
+    "automation_goals": {
+      "unit_tests": "100% automated",
+      "integration_tests": "100% automated",
+      "e2e_tests": "80% automated, 20% manual",
+      "visual_tests": "100% automated",
+      "performance_tests": "100% automated",
+      "accessibility_tests": "80% automated, 20% manual",
+      "security_tests": "90% automated, 10% manual"
+    },
+    "best_practices": {
+      "test_design": [
+        "Follow AAA pattern (Arrange, Act, Assert)",
+        "One assertion per test (or related assertions)",
+        "Test behavior, not implementation",
+        "Use descriptive test names",
+        "Keep tests independent and isolated"
+      ],
+      "test_data": [
+        "Use factory functions for test data",
+        "Avoid hard-coded values",
+        "Clean up after each test",
+        "Use meaningful test data",
+        "Avoid test data dependencies"
+      ],
+      "test_maintenance": [
+        "Update tests with code changes",
+        "Refactor tests as production code",
+        "Delete obsolete tests immediately",
+        "Review failing tests within 1 hour",
+        "Fix flaky tests immediately"
+      ],
+      "automation": [
+        "Prefer automated over manual",
+        "Automate regression tests",
+        "Run tests in CI/CD",
+        "Parallelize when possible",
+        "Monitor test execution time"
+      ]
+    },
+    "commands": {
+      "test_coverage": {
+        "description": "Generate test coverage reports",
+        "default_threshold": 80
+      },
+      "test_flakiness": {
+        "description": "Detect and analyze flaky tests",
+        "default_runs": 10
+      },
+      "accessibility_audit": {
+        "description": "Run accessibility audit",
+        "default_wcag_level": "AA"
+      },
+      "performance_test": {
+        "description": "Run performance tests",
+        "default_users": 50
+      },
+      "visual_test": {
+        "description": "Run visual regression tests",
+        "default_threshold": 0.1
+      },
+      "bug_report": {
+        "description": "Generate bug report",
+        "auto_classify": true
+      },
+      "test_plan": {
+        "description": "Create test plan",
+        "include_risk_analysis": true
+      }
+    },
+    "metrics_tracking": {
+      "test_metrics": [
+        "test_count",
+        "test_pass_rate",
+        "test_execution_time",
+        "flaky_test_rate",
+        "test_coverage_percentage"
+      ],
+      "quality_metrics": [
+        "bug_count_by_severity",
+        "bug_resolution_time",
+        "regression_rate",
+        "escaped_defects",
+        "test_automation_rate"
+      ],
+      "performance_metrics": [
+        "lcp_trend",
+        "fid_trend",
+        "cls_trend",
+        "api_response_time",
+        "throughput"
+      ],
+      "goals": {
+        "test_pass_rate": ">95%",
+        "flaky_test_rate": "<1%",
+        "test_coverage": ">80%",
+        "automation_rate": ">85%",
+        "bug_fix_time": "<24h for P1"
+      }
+    },
+    "vision_doc_support": {
+      "enabled": true,
+      "auto_load": true,
+      "session_hook": "load-project-context.sh",
+      "commands": [
+        "create-vision-doc",
+        "update-vision",
+        "validate-vision",
+        "implement"
+      ],
+      "focus_areas": [
+        "Test strategy and coverage targets",
+        "Quality gates and acceptance criteria",
+        "Test pyramid distribution",
+        "Automation framework selection",
+        "Performance and accessibility testing",
+        "CI/CD integration"
+      ]
+    }
+  }
+}

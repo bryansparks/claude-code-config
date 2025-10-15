@@ -1,0 +1,9 @@
+{
+  "name": "ux-toolkit",
+  "version": "1.0.0",
+  "description": "UX design toolkit with accessibility compliance, design system management, user flow optimization, responsive design validation, and interaction design",
+  "author": {
+    "name": "Bryan Sparks",
+    "email": "bryan@example.com"
+  }
+}

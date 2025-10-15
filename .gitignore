@@ -1,0 +1,48 @@
+# Claude Config - Git Ignore
+
+# Local-only files (user-specific, not in repo)
+.claude/config/persona.conf
+.claude/projects/
+*.backup.*
+.DS_Store
+
+# Temporary files
+*.tmp
+*.log
+/tmp/
+__pycache__/
+*.pyc
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files (may contain secrets)
+.env
+.env.local
+*.pem
+*.key
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node modules (if any MCP servers use npm)
+node_modules/
+
+# Documentation build artifacts
+docs/_build/
+site/

@@ -1,0 +1,9 @@
+{
+  "name": "engineer-toolkit",
+  "version": "1.0.0",
+  "description": "Comprehensive toolkit for software engineers with specialized agents for code review, debugging, refactoring, API design, and performance optimization",
+  "author": {
+    "name": "Bryan Sparks",
+    "email": "bryan@example.com"
+  }
+}

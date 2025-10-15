@@ -1,0 +1,293 @@
+{
+  "description": "MCP Server Configuration for QA Engineers - Optimized Testing Bundle",
+  "version": "2.3.0",
+  "persona": "qa-engineer",
+  "bundle_size": 7,
+  "servers": {
+    "playwright": {
+      "enabled": true,
+      "priority": 1,
+      "package": "@modelcontextprotocol/server-playwright",
+      "install_command": "npx -y @modelcontextprotocol/server-playwright",
+      "description": "E2E browser automation and testing (Microsoft official)",
+      "use_cases": [
+        "Create and run E2E tests across browsers",
+        "Automated visual regression testing",
+        "Cross-browser compatibility testing (Chrome, Firefox, Safari)",
+        "Mobile emulation and responsive testing",
+        "Performance profiling with network interception",
+        "Screenshot capture for visual validation"
+      ],
+      "why_essential": "Industry-standard E2E testing framework with AI integration"
+    },
+    "github": {
+      "enabled": true,
+      "priority": 1,
+      "package": "@modelcontextprotocol/server-github",
+      "install_command": "npx -y @modelcontextprotocol/server-github",
+      "description": "GitHub integration for bug tracking and test automation CI/CD",
+      "use_cases": [
+        "Create detailed bug reports with reproduction steps",
+        "Comment test results on pull requests",
+        "Track test failures and flaky tests",
+        "Integrate with GitHub Actions for CI/CD",
+        "Link tests to requirements in issues"
+      ],
+      "requires": [
+        "GITHUB_TOKEN"
+      ],
+      "why_essential": "Critical for bug tracking and test automation workflows"
+    },
+    "filesystem": {
+      "enabled": true,
+      "priority": 1,
+      "package": "@modelcontextprotocol/server-filesystem",
+      "install_command": "npx -y @modelcontextprotocol/server-filesystem",
+      "description": "Test file management and fixture handling",
+      "use_cases": [
+        "Manage test files and test suites",
+        "Read/write test fixtures and mock data",
+        "Organize visual regression baselines",
+        "Handle test report generation",
+        "Manage test configuration files"
+      ],
+      "why_essential": "Essential for test file and fixture management"
+    },
+    "a11y-mcp": {
+      "enabled": true,
+      "priority": 1,
+      "package": "a11y-mcp",
+      "install_command": "npm install -g a11y-mcp",
+      "description": "AI-powered accessibility testing with Axe-core integration",
+      "use_cases": [
+        "Run WCAG 2.0, 2.1, 2.2 compliance checks",
+        "Automated color contrast analysis",
+        "ARIA validation and keyboard navigation testing",
+        "Generate accessibility audit reports",
+        "Test against wcag2a, wcag2aa, wcag2aaa standards"
+      ],
+      "standards_supported": [
+        "WCAG 2.0",
+        "WCAG 2.1",
+        "WCAG 2.2",
+        "wcag2a, wcag2aa, wcag2aaa",
+        "wcag21a, wcag21aa, wcag22aa"
+      ],
+      "why_essential": "Automated a11y testing is required for WCAG compliance"
+    },
+    "memory": {
+      "enabled": true,
+      "priority": 2,
+      "package": "@modelcontextprotocol/server-memory",
+      "install_command": "npx -y @modelcontextprotocol/server-memory",
+      "description": "Persistent test case and bug investigation context",
+      "use_cases": [
+        "Store test scenarios and edge cases",
+        "Remember flaky test patterns",
+        "Cache test data and fixtures",
+        "Track bug investigation history",
+        "Maintain test execution context across sessions"
+      ],
+      "why_recommended": "Improves test planning with historical context"
+    },
+    "sequential-thinking": {
+      "enabled": true,
+      "priority": 2,
+      "package": "@modelcontextprotocol/server-sequential-thinking",
+      "install_command": "npx -y @modelcontextprotocol/server-sequential-thinking",
+      "description": "Structured test strategy planning and root cause analysis",
+      "use_cases": [
+        "Comprehensive test strategy planning",
+        "Systematic bug root cause analysis",
+        "Complex test scenario design",
+        "Risk-based test prioritization",
+        "Debugging flaky tests with structured approach"
+      ],
+      "why_recommended": "Essential for senior QA engineers doing test architecture"
+    },
+    "postgres": {
+      "enabled": true,
+      "priority": 2,
+      "package": "@modelcontextprotocol/server-postgres",
+      "install_command": "npx -y @modelcontextprotocol/server-postgres",
+      "description": "Database testing and test data management",
+      "use_cases": [
+        "Set up test data in databases",
+        "Validate data migrations in testing",
+        "Query database state for test assertions",
+        "Inspect database schema for integration tests",
+        "Manage test database fixtures"
+      ],
+      "requires": [
+        "POSTGRES_CONNECTION_STRING"
+      ],
+      "why_recommended": "Critical for integration and data validation testing",
+      "security_note": "Use dedicated test database with appropriate permissions"
+    }
+  },
+  "installation": {
+    "recommended_order": [
+      "playwright",
+      "github",
+      "filesystem",
+      "a11y-mcp",
+      "memory",
+      "sequential-thinking",
+      "postgres"
+    ],
+    "install_script": "./install-scripts/install-mcp-qa.sh",
+    "commands": {
+      "install_all": "./install-scripts/install-mcp-qa.sh",
+      "install_priority_1_only": "./install-scripts/install-mcp-qa.sh --priority-1",
+      "install_individual": "npx -y @modelcontextprotocol/server-<name>"
+    },
+    "environment_variables": {
+      "required": {
+        "GITHUB_TOKEN": "GitHub personal access token (repo scope)"
+      },
+      "optional": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://testuser:pass@localhost:5432/testdb",
+        "PLAYWRIGHT_BROWSERS_PATH": "0 (or custom path for browsers)"
+      }
+    }
+  },
+  "workflows": {
+    "e2e_test_creation": [
+      "1. Use Sequential-thinking to plan test scenarios",
+      "2. Use Playwright to implement E2E tests",
+      "3. Use Filesystem to save test files",
+      "4. Use Memory to store test patterns",
+      "5. Use GitHub to link tests to requirements"
+    ],
+    "accessibility_audit": [
+      "1. Use A11y MCP to run WCAG compliance checks",
+      "2. Use Playwright for keyboard navigation testing",
+      "3. Use Sequential-thinking to categorize violations",
+      "4. Use GitHub to create accessibility issues",
+      "5. Use Memory to track remediation progress"
+    ],
+    "bug_investigation": [
+      "1. Use Sequential-thinking for root cause analysis",
+      "2. Use Playwright to reproduce the bug",
+      "3. Use PostgreSQL to verify database state",
+      "4. Use GitHub to search for similar issues",
+      "5. Use Memory to store investigation findings",
+      "6. Use GitHub to create detailed bug report"
+    ],
+    "visual_regression": [
+      "1. Use Playwright to capture screenshots",
+      "2. Use Filesystem to manage baseline images",
+      "3. Compare against baselines with Playwright",
+      "4. Use Memory to store diff results",
+      "5. Use GitHub to comment on PR with results"
+    ],
+    "test_data_setup": [
+      "1. Use PostgreSQL to create test database schema",
+      "2. Use PostgreSQL to insert test data fixtures",
+      "3. Use Filesystem to save fixture scripts",
+      "4. Use Memory to cache test data patterns",
+      "5. Use Playwright to validate data in UI"
+    ]
+  },
+  "testing_standards": {
+    "test_coverage": {
+      "unit_tests": "80%+ coverage required",
+      "integration_tests": "60%+ for critical paths",
+      "e2e_tests": "All key user journeys",
+      "visual_tests": "All components + critical pages",
+      "accessibility_tests": "100% of user-facing pages"
+    },
+    "performance_thresholds": {
+      "LCP": "< 2.5s",
+      "FID": "< 100ms",
+      "CLS": "< 0.1",
+      "TTFB": "< 400ms",
+      "API_p95": "< 500ms",
+      "API_p99": "< 1000ms"
+    },
+    "accessibility_compliance": {
+      "standard": "WCAG 2.1 AA minimum",
+      "automated_tools": ["axe-core", "a11y-mcp", "Lighthouse"],
+      "manual_testing": ["Screen readers (NVDA, VoiceOver)", "Keyboard-only navigation"],
+      "target_score": "Lighthouse accessibility score ≥ 95"
+    },
+    "visual_regression": {
+      "diff_threshold": "0.1% pixel difference",
+      "max_diff_pixels": 100,
+      "browsers": ["chromium", "firefox", "webkit"],
+      "viewports": ["mobile (375x667)", "tablet (768x1024)", "desktop (1920x1080)"]
+    },
+    "quality_gates": {
+      "required_to_merge": [
+        "All tests passing",
+        "Test coverage ≥ 80%",
+        "No P0/P1 bugs",
+        "Accessibility score ≥ 95",
+        "Performance within thresholds"
+      ]
+    }
+  },
+  "best_practices": {
+    "playwright": [
+      "Use data-testid selectors for stability",
+      "Wait for networkidle before screenshots",
+      "Disable animations for visual tests",
+      "Mask dynamic content (timestamps, IDs)",
+      "Run tests in parallel for speed",
+      "Use test.describe() for organization"
+    ],
+    "a11y_mcp": [
+      "Run on every PR with GitHub Actions",
+      "Test with keyboard navigation",
+      "Verify screen reader announcements",
+      "Check color contrast ratios",
+      "Validate ARIA labels and roles",
+      "Test with actual assistive technology"
+    ],
+    "github": [
+      "Use bug report templates",
+      "Include reproduction steps always",
+      "Add severity labels (P0-P4)",
+      "Link to failed test runs",
+      "Tag with component labels",
+      "Assign to appropriate team"
+    ],
+    "sequential_thinking": [
+      "Use 5 Whys for root cause analysis",
+      "Break down complex test scenarios",
+      "Risk-based test prioritization",
+      "Document reasoning at each step",
+      "Consider edge cases systematically"
+    ],
+    "postgres": [
+      "Use transaction rollback for test isolation",
+      "Create fixtures with factory functions",
+      "Clean up test data after execution",
+      "Use separate test database",
+      "Seed with realistic data volumes"
+    ]
+  },
+  "automation_goals": {
+    "by_test_type": {
+      "unit_tests": "100% automated",
+      "integration_tests": "100% automated",
+      "e2e_tests": "80% automated, 20% exploratory",
+      "visual_tests": "100% automated",
+      "performance_tests": "100% automated",
+      "accessibility_tests": "80% automated, 20% manual",
+      "security_tests": "90% automated, 10% manual"
+    },
+    "ci_cd_integration": {
+      "run_on_pr": ["unit", "integration", "linting", "type-checking"],
+      "run_on_merge": ["e2e", "visual", "performance", "accessibility"],
+      "nightly": ["full regression", "load tests", "security scans"]
+    }
+  },
+  "optimization_tips": [
+    "Playwright: Run in parallel, use sharded execution for large suites",
+    "A11y MCP: Cache results for unchanged pages, run only on modified components",
+    "PostgreSQL: Use test database snapshots for faster setup/teardown",
+    "Memory: Store flaky test patterns to identify and fix systemic issues",
+    "Sequential-thinking: Use for complex scenarios, not simple test cases"
+  ]
+}

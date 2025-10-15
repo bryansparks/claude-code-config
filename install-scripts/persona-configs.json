@@ -1,0 +1,306 @@
+{
+  "version": "1.0.0",
+  "personas": {
+    "engineer": {
+      "id": "engineer",
+      "name": "Software Engineer",
+      "description": "Full-stack software engineer focused on code quality, testing, and implementation",
+      "icon": "👨‍💻",
+      "color": "blue",
+      "template_dir": "engineers",
+      "components": {
+        "subagents": [
+          "backend-engineer",
+          "frontend-ux-engineer",
+          "ai-ml-engineer",
+          "devops",
+          "code-reviewer",
+          "debugger",
+          "refactorer",
+          "api-designer",
+          "performance-optimizer"
+        ],
+        "hooks": [
+          "auto-test-runner",
+          "lint-on-save",
+          "dependency-check",
+          "commit-message-helper",
+          "complexity-check"
+        ],
+        "commands": [
+          "debug",
+          "refactor",
+          "optimize",
+          "review",
+          "test"
+        ],
+        "mcp_servers": [
+          "serena",
+          "claude-context",
+          "filesystem",
+          "memory",
+          "sequential-thinking",
+          "github"
+        ]
+      },
+      "focus_areas": [
+        "Java/Spring Boot development (primary)",
+        "Backend API design and microservices",
+        "Frontend development (React/Vue)",
+        "AI/ML integration and LangChain",
+        "DevOps and cloud deployment",
+        "Code quality and testing",
+        "Performance optimization",
+        "Large codebase navigation with Serena"
+      ],
+      "tools": [
+        "Java 17+, Spring Boot 3.x, Maven/Gradle",
+        "ESLint/Prettier, JUnit 5, Mockito",
+        "Jest/Pytest for testing",
+        "Git, Docker, Kubernetes",
+        "IntelliJ IDEA, VS Code",
+        "Serena MCP (semantic code nav)"
+      ]
+    },
+    "qa": {
+      "id": "qa",
+      "name": "QA Engineer",
+      "description": "Quality assurance specialist focused on testing, automation, and bug analysis",
+      "icon": "🧪",
+      "color": "green",
+      "template_dir": "qa-engineers",
+      "components": {
+        "subagents": [
+          "test-automation-specialist",
+          "bug-analyst",
+          "performance-tester",
+          "accessibility-auditor",
+          "visual-regression-tester"
+        ],
+        "hooks": [
+          "auto-test-on-change",
+          "coverage-reporter",
+          "visual-regression-check",
+          "accessibility-validator",
+          "test-flakiness-detector",
+          "bug-severity-classifier",
+          "performance-baseline-check"
+        ],
+        "commands": [
+          "test-coverage",
+          "test-flakiness",
+          "accessibility-audit",
+          "performance-test",
+          "visual-test",
+          "bug-report",
+          "test-plan"
+        ],
+        "mcp_servers": [
+          "playwright",
+          "github",
+          "sequential-thinking",
+          "context7"
+        ]
+      },
+      "focus_areas": [
+        "Test automation and frameworks",
+        "Bug detection and analysis",
+        "Performance and load testing",
+        "Accessibility compliance (WCAG)",
+        "Visual regression testing",
+        "Test coverage and quality metrics"
+      ],
+      "tools": [
+        "Playwright/Cypress",
+        "Jest/Pytest",
+        "Lighthouse",
+        "axe-core",
+        "k6/JMeter"
+      ]
+    },
+    "em": {
+      "id": "em",
+      "name": "Engineering Manager",
+      "description": "Engineering manager focused on team metrics, planning, and project health",
+      "icon": "👔",
+      "color": "purple",
+      "template_dir": "engineering-managers",
+      "components": {
+        "subagents": [
+          "project-analyzer",
+          "team-coordinator",
+          "technical-debt-assessor",
+          "metrics-reporter",
+          "code-health-monitor"
+        ],
+        "hooks": [
+          "pr-review-summary",
+          "sprint-health-check",
+          "technical-debt-tracker",
+          "team-velocity-calculator",
+          "dependency-analyzer",
+          "code-quality-trends",
+          "blocker-detector"
+        ],
+        "commands": [
+          "analyze-project",
+          "estimate-effort",
+          "technical-debt-audit",
+          "team-metrics",
+          "sprint-planning",
+          "capacity-planning",
+          "retrospective-analysis",
+          "dependency-map"
+        ],
+        "mcp_servers": [
+          "github",
+          "context7",
+          "memory",
+          "sequential-thinking"
+        ]
+      },
+      "focus_areas": [
+        "Team velocity and metrics",
+        "Sprint planning and execution",
+        "Technical debt management",
+        "Blocker identification",
+        "Resource and capacity planning",
+        "Code quality trends",
+        "Cross-team coordination"
+      ],
+      "tools": [
+        "GitHub/Jira",
+        "Slack",
+        "Analytics dashboards",
+        "Git",
+        "CI/CD tools"
+      ]
+    },
+    "pm": {
+      "id": "pm",
+      "name": "Product Manager",
+      "description": "Product manager focused on requirements, user stories, and roadmap planning",
+      "icon": "📊",
+      "color": "orange",
+      "template_dir": "product-managers",
+      "components": {
+        "subagents": [
+          "feature-analyzer",
+          "requirement-validator",
+          "user-story-writer",
+          "roadmap-planner",
+          "ux-evaluator"
+        ],
+        "hooks": [
+          "user-story-validator",
+          "acceptance-criteria-checker",
+          "feature-completeness-checker",
+          "documentation-generator",
+          "stakeholder-summary",
+          "feature-impact-analyzer"
+        ],
+        "commands": [
+          "analyze-feature",
+          "write-user-story",
+          "create-acceptance-criteria",
+          "estimate-feature",
+          "roadmap-planning",
+          "requirements-doc",
+          "stakeholder-update",
+          "ux-flow-analysis"
+        ],
+        "mcp_servers": [
+          "github",
+          "context7",
+          "memory",
+          "playwright"
+        ]
+      },
+      "focus_areas": [
+        "User story creation (As a/I want/So that)",
+        "Acceptance criteria (Given/When/Then)",
+        "Feature prioritization (RICE)",
+        "Roadmap planning",
+        "Requirements documentation",
+        "Stakeholder communication",
+        "UX validation"
+      ],
+      "tools": [
+        "GitHub Issues",
+        "Figma/Miro",
+        "Analytics tools",
+        "Documentation platforms",
+        "Presentation tools"
+      ]
+    },
+    "ux": {
+      "id": "ux",
+      "name": "UX Designer",
+      "description": "UX designer focused on design systems, accessibility, and user experience",
+      "icon": "🎨",
+      "color": "magenta",
+      "template_dir": "ux-designers",
+      "components": {
+        "subagents": [
+          "ui-component-reviewer",
+          "accessibility-specialist",
+          "design-system-expert",
+          "interaction-designer",
+          "user-flow-architect"
+        ],
+        "hooks": [
+          "accessibility-checker",
+          "design-token-validator",
+          "component-documentation",
+          "responsive-test",
+          "contrast-checker",
+          "design-system-sync"
+        ],
+        "commands": [
+          "design-review",
+          "accessibility-audit",
+          "component-library",
+          "design-system-check",
+          "user-flow",
+          "interaction-spec",
+          "responsive-audit",
+          "prototype-feedback"
+        ],
+        "mcp_servers": [
+          "playwright",
+          "github",
+          "filesystem",
+          "context7"
+        ]
+      },
+      "focus_areas": [
+        "Design system compliance",
+        "Accessibility (WCAG 2.1 AA/AAA)",
+        "Component library management",
+        "User flow optimization",
+        "Interaction design",
+        "Responsive design",
+        "Visual consistency",
+        "Usability best practices"
+      ],
+      "tools": [
+        "Figma/Sketch/Adobe XD",
+        "Storybook",
+        "Browser DevTools",
+        "Accessibility testing tools",
+        "Design token systems"
+      ]
+    }
+  },
+  "installation": {
+    "backup_enabled": true,
+    "backup_location": "~/.claude/backups/",
+    "force_overwrite": false,
+    "verify_installation": true
+  },
+  "compatibility": {
+    "min_claude_code_version": "1.0.0",
+    "os": ["macOS", "Linux", "Windows"],
+    "shell": ["bash", "zsh"]
+  }
+}
