@@ -1,0 +1,884 @@
+# SuperClaude MCP Configuration
+# Version: 1.0.0
+# Purpose: MCP server capabilities, workflows, and persona integration patterns
+
+---
+
+Server_Capabilities_Extended:
+  description: "Comprehensive MCP server capabilities across all personas"
+
+  serena:
+    full_name: "Serena - LSP-based Semantic Code Navigator"
+    package: "@oraios/serena-mcp"
+    install_command: "uvx --from git+https://github.com/oraios/serena serena-mcp-server"
+    type: "Code navigation and understanding"
+    priority: 1
+    personas: ["engineer"]
+
+    capabilities:
+      semantic_navigation:
+        - "Go to definition (follows imports, understands modules)"
+        - "Find all references (across entire codebase)"
+        - "Find all implementations (interfaces, abstract classes)"
+        - "Symbol-level code search (not keyword matching)"
+        - "Workspace symbol lookup"
+
+      language_understanding:
+        - "Understands dependency injection (@Autowired, @Component, etc.)"
+        - "Recognizes design patterns in code"
+        - "Type inference and resolution"
+        - "Import path resolution"
+        - "Framework-specific annotations"
+
+      supported_languages:
+        - "Java (Spring Boot, Spring Cloud, Hibernate)"
+        - "Python (Django, FastAPI, Flask)"
+        - "JavaScript/TypeScript (React, Vue, Angular)"
+        - "Go (Gin, Echo)"
+        - "Rust (Actix, Rocket)"
+
+    unique_value:
+      description: "Only MCP server using Language Server Protocol"
+      benefit: "Understands code semantically, not just text patterns"
+      performance: "100x better than text-based search for complex codebases"
+
+    use_cases:
+      - "Navigate large Spring Boot monoliths with complex DI"
+      - "Find all implementations of repository interfaces"
+      - "Understand microservice dependencies"
+      - "Trace API endpoint to database query"
+      - "Refactor with confidence (find all usages)"
+
+    optimization:
+      startup_cost: "High (LSP initialization takes 5-30 seconds)"
+      recommendation: "Keep server running between sessions"
+      memory_usage: "Moderate to high (caches AST)"
+
+  github:
+    full_name: "GitHub - Repository and Project Management"
+    package: "@modelcontextprotocol/server-github"
+    install_command: "npx -y @modelcontextprotocol/server-github"
+    type: "Version control and project management"
+    priority: 1
+    personas: ["all"]
+    requires_env: ["GITHUB_TOKEN"]
+
+    capabilities:
+      pull_requests:
+        - "Create PRs with AI-generated descriptions"
+        - "Review PRs and suggest code improvements"
+        - "Comment on specific lines in PRs"
+        - "Approve or request changes on PRs"
+        - "Merge PRs with different strategies"
+
+      issues:
+        - "Create issues with templates"
+        - "Search and filter issues"
+        - "Update issue status and labels"
+        - "Link issues to PRs"
+        - "Bulk issue operations"
+
+      repository:
+        - "Search code across repositories"
+        - "Access file contents at specific commits"
+        - "View commit history and diffs"
+        - "Manage branches"
+        - "Access GitHub Actions workflows and results"
+
+      project_management:
+        - "Manage project boards"
+        - "Track milestones"
+        - "View repository insights"
+        - "Access release information"
+
+    token_setup:
+      scopes_required:
+        - "repo (full control of private repositories)"
+        - "read:org (read org data)"
+        - "workflow (update GitHub Actions workflows)"
+
+      generation_url: "https://github.com/settings/tokens/new"
+
+    universal_workflows:
+      engineer:
+        - "Create feature branches"
+        - "Submit PRs with comprehensive descriptions"
+        - "Review team PRs"
+        - "Link PRs to issues"
+
+      qa:
+        - "Create bug reports with reproduction steps"
+        - "Comment test results on PRs"
+        - "Track test failures"
+        - "Link tests to requirements"
+
+      pm:
+        - "Manage issues and project boards"
+        - "Track milestones and releases"
+        - "Prioritize backlog"
+        - "Generate status reports"
+
+      em:
+        - "Track team velocity via PRs"
+        - "Monitor PR review times"
+        - "Analyze commit patterns"
+        - "Manage project boards"
+
+      ux:
+        - "Review design implementation in PRs"
+        - "Track design system changes"
+        - "Link designs to implementation issues"
+
+  filesystem:
+    full_name: "Filesystem - Fast File Operations"
+    package: "@modelcontextprotocol/server-filesystem"
+    install_command: "npx -y @modelcontextprotocol/server-filesystem"
+    type: "File I/O operations"
+    priority: 1
+    personas: ["all"]
+
+    capabilities:
+      read_operations:
+        - "Read files with encoding detection"
+        - "Sequential reading for large files (pagination)"
+        - "Pattern-based file search (glob patterns)"
+        - "Directory listing and traversal"
+        - "File metadata (size, modified time, permissions)"
+
+      write_operations:
+        - "Create files with atomic writes"
+        - "Update files with backup creation"
+        - "Streaming writes for large files"
+        - "Batch file operations"
+        - "Recovery from failed writes"
+
+      safety_features:
+        - "Automatic backups before modification"
+        - "Permission checking"
+        - "Sandboxed access (configurable)"
+        - "Rollback on error"
+
+    optimization:
+      - "Use for targeted file access (when path is known)"
+      - "Prefer over bash cat/head/tail"
+      - "Leverage pagination for large files"
+      - "Use glob patterns instead of recursive find"
+
+    universal_value: "Every persona needs file I/O"
+
+  memory:
+    full_name: "Memory - Persistent Context Server"
+    package: "@modelcontextprotocol/server-memory"
+    install_command: "npx -y @modelcontextprotocol/server-memory"
+    type: "Context persistence and learning"
+    priority: 2
+    personas: ["all"]
+
+    capabilities:
+      knowledge_graphs:
+        - "Store entities and relationships"
+        - "Create semantic links between concepts"
+        - "Query knowledge graph"
+        - "Update entities with new learnings"
+
+      context_retention:
+        - "Remember architecture decisions"
+        - "Store coding patterns and preferences"
+        - "Cache frequently used information"
+        - "Maintain project-specific context"
+
+      session_continuity:
+        - "Resume complex tasks across sessions"
+        - "Reference past discussions"
+        - "Track long-term investigations"
+        - "Maintain learning curve"
+
+    use_by_persona:
+      engineer:
+        - "Architecture decisions rationale"
+        - "Project-specific coding patterns"
+        - "Debug investigation history"
+        - "Performance optimization insights"
+
+      qa:
+        - "Flaky test patterns"
+        - "Bug investigation findings"
+        - "Test data and fixtures"
+        - "Quality metrics trends"
+
+      pm:
+        - "Product decisions and tradeoffs"
+        - "User feedback synthesis"
+        - "Feature priority reasoning"
+        - "Stakeholder preferences"
+
+      em:
+        - "Team velocity patterns"
+        - "Technical debt items"
+        - "Process improvements tried"
+        - "Retrospective action items"
+
+      ux:
+        - "Design decisions rationale"
+        - "User research findings"
+        - "Design patterns library"
+        - "Accessibility guidelines"
+
+    optimization:
+      - "Dramatically reduces re-explanation"
+      - "Improves context efficiency by 30-50%"
+      - "Essential for large/complex projects"
+      - "Low overhead, high value"
+
+  sequential_thinking:
+    full_name: "Sequential Thinking - Multi-Phase Planning"
+    package: "@modelcontextprotocol/server-sequential-thinking"
+    install_command: "npx -y @modelcontextprotocol/server-sequential-thinking"
+    type: "Structured problem decomposition"
+    priority: 2
+    personas: ["all"]
+
+    capabilities:
+      planning:
+        - "Break down complex tasks into phases"
+        - "Identify dependencies between steps"
+        - "Risk assessment and mitigation"
+        - "Resource estimation"
+
+      analysis:
+        - "Root cause analysis (5 Whys)"
+        - "Impact analysis for changes"
+        - "Trade-off evaluation"
+        - "Decision trees"
+
+      reasoning:
+        - "Step-by-step logical reasoning"
+        - "Evidence-based conclusions"
+        - "Alternative approach comparison"
+        - "Assumption validation"
+
+    use_by_persona:
+      engineer:
+        - "Architectural design"
+        - "Complex refactoring planning"
+        - "Multi-step debugging"
+        - "Migration planning"
+
+      qa:
+        - "Comprehensive test strategy"
+        - "Bug root cause analysis"
+        - "Complex test scenario design"
+        - "Risk-based prioritization"
+
+      pm:
+        - "Feature decomposition"
+        - "Requirements analysis"
+        - "Prioritization frameworks"
+        - "Stakeholder alignment"
+
+      em:
+        - "Sprint planning"
+        - "Technical debt prioritization"
+        - "Process improvement design"
+        - "Resource allocation"
+
+      ux:
+        - "User flow design"
+        - "Design system planning"
+        - "Accessibility audit"
+        - "Responsive breakpoint strategy"
+
+    when_to_use:
+      - "Complex multi-step problems"
+      - "Architectural or strategic decisions"
+      - "Root cause analysis"
+      - "Tasks requiring structured reasoning"
+
+    when_not_to_use:
+      - "Simple straightforward tasks"
+      - "Repetitive operations"
+      - "Well-defined single-step actions"
+
+  playwright:
+    full_name: "Playwright - Browser Automation"
+    package: "@modelcontextprotocol/server-playwright"
+    install_command: "npx -y @modelcontextprotocol/server-playwright"
+    type: "E2E testing and browser automation"
+    priority: 2
+    personas: ["qa", "engineer", "ux"]
+
+    capabilities:
+      test_automation:
+        - "E2E test creation and execution"
+        - "Cross-browser testing (Chrome, Firefox, Safari)"
+        - "Mobile device emulation"
+        - "Parallel test execution"
+        - "Test report generation"
+
+      visual_testing:
+        - "Screenshot capture"
+        - "Visual regression comparison"
+        - "PDF generation"
+        - "Video recording"
+
+      interaction:
+        - "Form filling and submission"
+        - "Click, hover, drag-and-drop"
+        - "Keyboard navigation testing"
+        - "File upload/download"
+
+      inspection:
+        - "Network interception and mocking"
+        - "Console log capture"
+        - "Performance profiling"
+        - "Accessibility tree inspection"
+
+    use_by_persona:
+      qa:
+        - "Primary: E2E test automation"
+        - "Visual regression testing"
+        - "Cross-browser compatibility"
+        - "Performance testing"
+
+      engineer:
+        - "E2E tests for new features"
+        - "Debug frontend issues"
+        - "Test API integrations"
+        - "Validate user flows"
+
+      ux:
+        - "Test interactive prototypes"
+        - "Validate responsive design"
+        - "Test user flows"
+        - "Visual validation"
+
+    optimization:
+      - "Run tests in parallel for speed"
+      - "Use sharding for large suites"
+      - "Disable animations for screenshots"
+      - "Mask dynamic content (timestamps, IDs)"
+
+  postgres:
+    full_name: "PostgreSQL - Database Operations"
+    package: "@modelcontextprotocol/server-postgres"
+    install_command: "npx -y @modelcontextprotocol/server-postgres"
+    type: "Database querying and schema inspection"
+    priority: 2
+    personas: ["engineer", "qa", "em"]
+    requires_env: ["POSTGRES_CONNECTION_STRING"]
+
+    capabilities:
+      schema_inspection:
+        - "List tables, views, schemas"
+        - "Describe table columns and types"
+        - "View indexes and constraints"
+        - "Inspect foreign key relationships"
+        - "Analyze table statistics"
+
+      query_execution:
+        - "Execute SELECT queries"
+        - "View query execution plans (EXPLAIN)"
+        - "Query performance analysis"
+        - "Result pagination"
+
+      data_management:
+        - "Insert test data"
+        - "Update records"
+        - "Delete records (with safety checks)"
+        - "Transaction management"
+
+    security:
+      recommendation: "Use read-only user for production"
+      read_only_user_sql: |
+        CREATE USER claude_readonly WITH PASSWORD 'secure_password';
+        GRANT CONNECT ON DATABASE your_db TO claude_readonly;
+        GRANT USAGE ON SCHEMA public TO claude_readonly;
+        GRANT SELECT ON ALL TABLES IN SCHEMA public TO claude_readonly;
+        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO claude_readonly;
+
+    use_by_persona:
+      engineer:
+        - "Query database schema during development"
+        - "Test SQL queries"
+        - "Debug data issues"
+        - "Validate migrations"
+
+      qa:
+        - "Set up test data"
+        - "Validate data integrity"
+        - "Test data-driven scenarios"
+        - "Query test results"
+
+      em:
+        - "Query metrics and analytics data"
+        - "Analyze system usage patterns"
+        - "Generate reports"
+
+    connection_string_format: "postgresql://user:password@host:port/database"
+
+  linear:
+    full_name: "Linear - Issue Tracking"
+    package: "@linear/sdk"
+    install_command: "npx -y @linear/sdk"
+    type: "Issue tracking and project management"
+    priority: 1
+    personas: ["pm", "em"]
+    requires_env: ["LINEAR_API_KEY"]
+
+    capabilities:
+      - "Create and update issues"
+      - "Manage issue status and priorities"
+      - "Sprint planning and tracking"
+      - "Project and milestone management"
+      - "Team and workspace operations"
+      - "Search and filter issues"
+
+    use_by_persona:
+      pm:
+        - "Create user stories and epics"
+        - "Prioritize backlog"
+        - "Track feature development"
+        - "Manage roadmap"
+
+      em:
+        - "Sprint planning"
+        - "Velocity tracking"
+        - "Team capacity planning"
+        - "Blocker management"
+
+  posthog:
+    full_name: "PostHog - Product Analytics"
+    package: "posthog-node"
+    install_command: "npm install posthog-node"
+    type: "Product analytics and feature flags"
+    priority: 1
+    personas: ["pm", "em"]
+    requires_env: ["POSTHOG_API_KEY"]
+
+    capabilities:
+      analytics:
+        - "Query user behavior data"
+        - "Feature usage analysis"
+        - "Funnel analysis"
+        - "Retention metrics"
+        - "User segmentation"
+
+      feature_flags:
+        - "Manage feature flags"
+        - "A/B test setup"
+        - "Gradual rollouts"
+        - "Flag analytics"
+
+    use_by_persona:
+      pm:
+        - "Analyze feature adoption"
+        - "A/B test results"
+        - "User behavior insights"
+        - "Feature usage metrics"
+
+      em:
+        - "Engineering metrics"
+        - "Performance tracking"
+        - "Error rate monitoring"
+        - "Feature success measurement"
+
+  figma:
+    full_name: "Figma - Design Collaboration"
+    package: "figma-api"
+    install_command: "npm install figma-api"
+    type: "Design file access and collaboration"
+    priority: 1
+    personas: ["ux", "pm"]
+    requires_env: ["FIGMA_ACCESS_TOKEN"]
+
+    capabilities:
+      - "Access design files and components"
+      - "Extract design tokens"
+      - "Comment on designs"
+      - "View design versions"
+      - "Export assets"
+
+    use_by_persona:
+      ux:
+        - "Review and update designs"
+        - "Design system management"
+        - "Component documentation"
+        - "Collaboration with engineers"
+
+      pm:
+        - "Review designs"
+        - "Provide product feedback"
+        - "Track design progress"
+        - "Align designs with requirements"
+
+  a11y_mcp:
+    full_name: "A11y MCP - Accessibility Testing"
+    package: "a11y-mcp"
+    install_command: "npm install -g a11y-mcp"
+    type: "Automated accessibility testing"
+    priority: 1
+    personas: ["qa", "ux"]
+
+    capabilities:
+      wcag_compliance:
+        - "WCAG 2.0, 2.1, 2.2 checks"
+        - "Level A, AA, AAA validation"
+        - "Rule-based testing (Axe-core)"
+
+      analysis:
+        - "Color contrast analysis"
+        - "ARIA validation"
+        - "Semantic HTML validation"
+        - "Keyboard navigation checks"
+        - "Screen reader compatibility"
+
+      reporting:
+        - "Detailed violation reports"
+        - "Remediation recommendations"
+        - "Compliance scoring"
+        - "Export to JSON/HTML"
+
+    use_by_persona:
+      qa:
+        - "Automated WCAG testing in CI/CD"
+        - "Regression testing for accessibility"
+        - "Comprehensive accessibility audits"
+        - "Generate accessibility reports"
+
+      ux:
+        - "Design-level accessibility review"
+        - "Color contrast validation"
+        - "Component accessibility audit"
+        - "Early accessibility feedback"
+
+    standards_supported:
+      - "WCAG 2.0 (A, AA, AAA)"
+      - "WCAG 2.1 (A, AA, AAA)"
+      - "WCAG 2.2 (A, AA)"
+
+  slack:
+    full_name: "Slack - Team Communication"
+    package: "@slack/web-api"
+    install_command: "npm install @slack/web-api"
+    type: "Team communication and notifications"
+    priority: 2
+    personas: ["em", "pm", "ux"]
+    requires_env: ["SLACK_BOT_TOKEN"]
+
+    capabilities:
+      - "Send messages to channels"
+      - "Post updates and notifications"
+      - "Search message history"
+      - "File sharing"
+      - "User and channel management"
+
+    use_by_persona:
+      em:
+        - "Post standup summaries"
+        - "Share sprint updates"
+        - "Announce releases"
+        - "Escalate blockers"
+
+      pm:
+        - "Share product updates"
+        - "Communicate roadmap changes"
+        - "Gather stakeholder feedback"
+        - "Announce features"
+
+      ux:
+        - "Share design updates"
+        - "Request feedback"
+        - "Announce design system changes"
+
+  jira:
+    full_name: "Jira - Enterprise Project Management"
+    package: "jira-client"
+    install_command: "npm install jira-client"
+    type: "Enterprise issue tracking"
+    priority: 2
+    personas: ["pm", "em"]
+    requires_env: ["JIRA_HOST", "JIRA_EMAIL", "JIRA_API_TOKEN"]
+
+    capabilities:
+      - "Issue creation and management"
+      - "Sprint planning"
+      - "Epic and story tracking"
+      - "Board management"
+      - "JQL search"
+      - "Custom field handling"
+
+    use_by_persona:
+      pm:
+        - "Epic and story management"
+        - "Backlog prioritization"
+        - "Release planning"
+        - "Status reporting"
+
+      em:
+        - "Sprint management"
+        - "Velocity tracking"
+        - "Capacity planning"
+        - "Burndown analysis"
+
+---
+
+Workflows:
+  description: "Common workflows across personas using MCP servers"
+
+  feature_development:
+    personas: ["engineer", "pm", "qa", "ux"]
+
+    phases:
+      planning:
+        pm_actions:
+          - "Linear: Create feature epic"
+          - "GitHub: Create feature tracking issue"
+          - "Figma: Review design specifications"
+          - "Memory: Store product requirements"
+
+      design:
+        ux_actions:
+          - "Figma: Create/update design"
+          - "A11y MCP: Validate accessibility at design stage"
+          - "Memory: Document design decisions"
+          - "Slack: Share design with team"
+
+      implementation:
+        engineer_actions:
+          - "Serena: Navigate codebase for integration points"
+          - "Sequential-thinking: Plan implementation phases"
+          - "Filesystem: Write code"
+          - "PostgreSQL: Update database schema"
+          - "Memory: Store architectural decisions"
+
+      testing:
+        qa_actions:
+          - "Sequential-thinking: Plan test scenarios"
+          - "Playwright: Create E2E tests"
+          - "A11y MCP: Run accessibility tests"
+          - "Filesystem: Save test files"
+          - "PostgreSQL: Set up test data"
+
+      review:
+        engineer_actions:
+          - "GitHub: Create pull request"
+          - "Serena: Verify no breaking changes"
+
+        qa_actions:
+          - "Playwright: Run test suite"
+          - "GitHub: Comment test results"
+
+        ux_actions:
+          - "GitHub: Review implementation vs design"
+          - "Playwright: Visual validation"
+
+      deployment:
+        em_actions:
+          - "GitHub: Monitor deployment"
+          - "PostHog: Track feature adoption"
+          - "Slack: Announce release"
+          - "Memory: Store deployment notes"
+
+  bug_resolution:
+    personas: ["qa", "engineer"]
+
+    phases:
+      reporting:
+        qa_actions:
+          - "Playwright: Reproduce bug"
+          - "Sequential-thinking: Root cause analysis"
+          - "GitHub: Create detailed bug report"
+          - "Memory: Store investigation findings"
+
+      investigation:
+        engineer_actions:
+          - "Memory: Check for similar past issues"
+          - "Serena: Find related code"
+          - "PostgreSQL: Verify database state"
+          - "Sequential-thinking: Analyze root cause"
+
+      fixing:
+        engineer_actions:
+          - "Filesystem: Apply fix"
+          - "Playwright: Verify fix manually"
+          - "GitHub: Create fix PR"
+
+      verification:
+        qa_actions:
+          - "Playwright: Verify fix with tests"
+          - "Filesystem: Add regression test"
+          - "GitHub: Approve PR"
+          - "Memory: Update fix patterns"
+
+  sprint_planning:
+    personas: ["em", "pm"]
+
+    phases:
+      preparation:
+        em_actions:
+          - "GitHub: Analyze completed PRs"
+          - "Linear/Jira: Calculate team velocity"
+          - "Memory: Review past sprint notes"
+          - "Sequential-thinking: Plan capacity"
+
+        pm_actions:
+          - "Linear/Jira: Prioritize backlog"
+          - "PostHog: Review feature metrics"
+          - "Memory: Recall product priorities"
+          - "GitHub: Review open issues"
+
+      execution:
+        em_actions:
+          - "Linear/Jira: Create sprint"
+          - "Sequential-thinking: Balance workload"
+          - "Slack: Share sprint goals"
+          - "Memory: Store sprint decisions"
+
+      tracking:
+        em_actions:
+          - "Linear/Jira: Monitor progress"
+          - "GitHub: Track PR velocity"
+          - "PostgreSQL: Query metrics"
+          - "Slack: Daily standups"
+
+  accessibility_audit:
+    personas: ["qa", "ux"]
+
+    phases:
+      automated_testing:
+        qa_actions:
+          - "A11y MCP: Run WCAG compliance checks"
+          - "Playwright: Keyboard navigation testing"
+          - "Sequential-thinking: Categorize violations"
+          - "Filesystem: Generate report"
+
+      design_review:
+        ux_actions:
+          - "Figma: Review color contrast"
+          - "A11y MCP: Validate design decisions"
+          - "Memory: Check accessibility guidelines"
+          - "Sequential-thinking: Plan remediation"
+
+      remediation:
+        ux_actions:
+          - "Figma: Update designs"
+          - "GitHub: Create accessibility issues"
+
+        engineer_actions:
+          - "Serena: Find components to update"
+          - "Filesystem: Implement fixes"
+          - "Playwright: Test with screen reader"
+
+      validation:
+        qa_actions:
+          - "A11y MCP: Retest compliance"
+          - "Playwright: Full accessibility test suite"
+          - "GitHub: Comment results"
+          - "Memory: Update accessibility patterns"
+
+---
+
+MCP_Persona_Integration:
+  description: "How MCP servers integrate with each persona's workflow"
+
+  installation_per_persona:
+    engineer:
+      priority_1: ["serena", "github", "filesystem"]
+      priority_2: ["memory", "sequential-thinking", "playwright", "postgres"]
+      total_servers: 7
+
+    qa:
+      priority_1: ["playwright", "github", "filesystem", "a11y-mcp"]
+      priority_2: ["memory", "sequential-thinking", "postgres"]
+      total_servers: 7
+
+    pm:
+      priority_1: ["github", "linear", "posthog", "figma"]
+      priority_2: ["memory", "jira", "slack"]
+      total_servers: 7
+
+    em:
+      priority_1: ["github", "linear", "posthog", "slack"]
+      priority_2: ["memory", "postgres"]
+      total_servers: 6
+
+    ux:
+      priority_1: ["figma", "a11y-mcp", "playwright", "filesystem"]
+      priority_2: ["memory", "slack"]
+      total_servers: 6
+
+  environment_variables:
+    description: "Required tokens per persona"
+
+    engineer:
+      required:
+        - "GITHUB_TOKEN"
+      optional:
+        - "POSTGRES_CONNECTION_STRING"
+
+    qa:
+      required:
+        - "GITHUB_TOKEN"
+      optional:
+        - "POSTGRES_CONNECTION_STRING"
+        - "PLAYWRIGHT_BROWSERS_PATH"
+
+    pm:
+      required:
+        - "GITHUB_TOKEN"
+        - "LINEAR_API_KEY"
+        - "POSTHOG_API_KEY"
+        - "FIGMA_ACCESS_TOKEN"
+      optional:
+        - "JIRA_HOST"
+        - "JIRA_EMAIL"
+        - "JIRA_API_TOKEN"
+        - "SLACK_BOT_TOKEN"
+
+    em:
+      required:
+        - "GITHUB_TOKEN"
+        - "LINEAR_API_KEY"
+        - "POSTHOG_API_KEY"
+        - "SLACK_BOT_TOKEN"
+      optional:
+        - "POSTGRES_CONNECTION_STRING"
+
+    ux:
+      required:
+        - "FIGMA_ACCESS_TOKEN"
+      optional:
+        - "GITHUB_TOKEN"
+        - "SLACK_BOT_TOKEN"
+
+  optimization_by_persona:
+    engineer:
+      - "Keep Serena running between sessions (expensive startup)"
+      - "Use Memory to cache architecture decisions"
+      - "PostgreSQL with read-only user for safety"
+
+    qa:
+      - "Run Playwright tests in parallel with sharding"
+      - "Cache A11y MCP results for unchanged pages"
+      - "Use PostgreSQL snapshots for fast test setup"
+
+    pm:
+      - "Cache PostHog analytics queries in Memory"
+      - "Use Linear API efficiently (batch operations)"
+      - "Figma: fetch only necessary design data"
+
+    em:
+      - "Query GitHub API efficiently (use GraphQL)"
+      - "Cache metrics data in Memory"
+      - "Batch Slack notifications"
+
+    ux:
+      - "Figma: use component libraries for consistency"
+      - "A11y MCP: run on modified components only"
+      - "Playwright: focus on visual tests for changed pages"
+
+---
+
+Version: 1.0.0
+Status: Active
+Last Updated: 2025-11-11

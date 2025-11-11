@@ -1,17 +1,10 @@
-# Organization Standards - Engineering Best Practices
+# ORGANIZATION.md - Engineering Standards & Best Practices
 
-**Protected File**: Automatically installed via Claude-Config. Update by modifying in Claude-Config repo and running `install.sh --update`
-**Version**: 1.0.0
-**Last Updated**: 2025-01-11
-**Purpose**: Organization-wide standards preserved across all projects
+> **Purpose**: This document defines organization-wide engineering standards, guard-rails, and protocols that apply to ALL projects. These standards are enforced through code review, automated tooling, and CI/CD pipelines.
 
----
+> **Scope**: Global - applies to all repositories, all teams, all personas
 
-> **Note**: This is a comprehensive template. Customize for your organization by:
-> 1. Update organization name and branding
-> 2. Adjust technology stack to match your approved tools
-> 3. Modify security requirements for your compliance needs
-> 4. Update team/communication standards
+> **Maintenance**: Owned by Engineering Leadership. Updates distributed via Claude-Config updates.
 
 ---
 
@@ -133,6 +126,7 @@
 - ✅ **Update high vulnerabilities**: Within 30 days
 - ✅ **Pin dependencies**: Use lock files (package-lock.json, Pipfile.lock, go.sum)
 - ✅ **Audit regularly**: `npm audit`, `pip-audit`, `go mod verify`
+- ❌ No dependencies with GPL/AGPL licenses (unless approved)
 
 ---
 
@@ -157,6 +151,8 @@
 
 ### Test Pyramid
 
+Follow the test pyramid approach:
+
 ```
            /\
           /  \  E2E Tests (10%)
@@ -167,6 +163,24 @@
      /   Unit     \  Unit Tests (70%)
     /______________\
 ```
+
+**Unit Tests (70% of tests)**
+- Fast (<100ms per test)
+- Isolated (no external dependencies)
+- Focused (one concept per test)
+- TDD workflow (Red-Green-Refactor)
+
+**Integration Tests (20% of tests)**
+- Test component interactions
+- Use test databases/APIs
+- Focus on contracts between services
+- Moderate speed (<5s per test)
+
+**E2E Tests (10% of tests)**
+- Critical user journeys only
+- Run against staging environment
+- Acceptable speed (<30s per test)
+- Flaky tests must be fixed or removed
 
 ### Test-Driven Development (TDD)
 
@@ -179,6 +193,22 @@
 1. **Red**: Write failing test
 2. **Green**: Write minimal code to pass
 3. **Refactor**: Improve code while keeping tests green
+
+### Test Quality Standards
+
+✅ **Good Tests:**
+- Clear test names (describe what is being tested)
+- Arrange-Act-Assert (AAA) pattern
+- One assertion per test (generally)
+- No logic in tests (no if/else, no loops)
+- Fast and deterministic
+
+❌ **Bad Tests:**
+- Flaky tests (non-deterministic)
+- Slow tests (>1s for unit tests)
+- Tests that test implementation details
+- Tests with hard-coded dates/times
+- Tests that depend on execution order
 
 ---
 
@@ -227,6 +257,42 @@
 - ✅ Lazy loading
 - ✅ Pagination for large datasets
 
+**Testing**
+- ✅ Tests included
+- ✅ Coverage requirements met
+- ✅ Edge cases tested
+- ✅ Error cases tested
+- ✅ Tests are maintainable
+
+**Documentation**
+- ✅ API documentation (OpenAPI/Swagger)
+- ✅ Inline comments for complex logic
+- ✅ README updated (if applicable)
+- ✅ ADR for significant decisions
+
+**Accessibility**
+- ✅ Semantic HTML
+- ✅ ARIA labels where needed
+- ✅ Keyboard navigation
+- ✅ Color contrast (WCAG AA)
+- ✅ Screen reader compatibility
+
+### Review Etiquette
+
+**For Reviewers:**
+- 🎯 Be specific ("Use const instead of let here" vs "Fix this")
+- 🤝 Be respectful (assume positive intent)
+- 📚 Provide context (explain WHY, not just WHAT)
+- ✅ Approve when ready (don't hold up good work)
+- 🚫 Don't nitpick style (automate with linters)
+
+**For Authors:**
+- 📝 Provide context (link to ticket, explain approach)
+- 🏗️ Keep PRs small (<400 lines preferred)
+- 💬 Respond to all comments
+- 🙏 Thank reviewers
+- 🚫 Don't take feedback personally
+
 ---
 
 ## 🌿 Git Workflow & Conventions
@@ -239,6 +305,7 @@
 main (protected)
   ├── develop (protected)
   │   ├── feature/TICKET-123-short-description
+  │   ├── feature/TICKET-456-another-feature
   │   ├── bugfix/TICKET-789-fix-login-issue
   │   └── hotfix/TICKET-999-critical-security-fix
 ```
@@ -249,6 +316,18 @@ main (protected)
 - `hotfix/TICKET-ID-short-description` - Critical production fixes
 - `refactor/TICKET-ID-short-description` - Code refactoring
 - `docs/TICKET-ID-short-description` - Documentation only
+
+**Protected Branches:**
+- `main` - Production-ready code only
+- `develop` - Integration branch for features
+
+**Protections:**
+- ✅ Require pull request reviews (minimum 1)
+- ✅ Require status checks to pass
+- ✅ Require branches to be up to date
+- ✅ Require linear history (no merge commits to main)
+- ❌ No direct commits (even for admins)
+- ❌ No force pushes
 
 ### Commit Message Conventions
 
@@ -271,6 +350,8 @@ main (protected)
 - `perf` - Performance improvements
 - `test` - Adding or updating tests
 - `chore` - Maintenance tasks (dependencies, build)
+- `ci` - CI/CD pipeline changes
+- `revert` - Reverting previous commit
 
 **Examples:**
 
@@ -282,6 +363,80 @@ Supports Google and GitHub as identity providers.
 
 Closes TICKET-123
 ```
+
+```
+fix(api): prevent SQL injection in user search
+
+Use parameterized queries instead of string concatenation.
+
+Security: Fixes OWASP A03:2021 Injection vulnerability
+```
+
+```
+perf(database): add index on user_id column
+
+Query performance improved from 2.5s to 50ms for user lookups.
+```
+
+**Commit Guidelines:**
+- ✅ Use imperative mood ("add" not "added" or "adds")
+- ✅ First line 50 characters or less
+- ✅ Body wrapped at 72 characters
+- ✅ Reference ticket ID
+- ✅ Atomic commits (one logical change per commit)
+- ❌ No "WIP" or "fix" commits in main/develop
+
+### Pull Request Guidelines
+
+**PR Title:**
+- Follow commit message format: `type(scope): description`
+- Clear and descriptive
+
+**PR Description Template:**
+
+```markdown
+## Summary
+Brief description of changes (2-3 sentences)
+
+## Related Ticket
+Closes TICKET-123
+
+## Changes Made
+- Added OAuth2 authentication
+- Updated user model with provider field
+- Added integration tests
+
+## Testing
+- [ ] Unit tests added/updated
+- [ ] Integration tests added/updated
+- [ ] Manual testing completed
+- [ ] Accessibility tested (if UI changes)
+
+## Screenshots (if applicable)
+[Add screenshots for UI changes]
+
+## Security Considerations
+[Describe any security implications]
+
+## Performance Considerations
+[Describe any performance implications]
+
+## Deployment Notes
+[Any special deployment requirements]
+```
+
+**PR Size Guidelines:**
+- ✅ **Small** (<200 lines): Preferred
+- ⚠️ **Medium** (200-500 lines): Acceptable
+- ❌ **Large** (>500 lines): Break into smaller PRs
+
+**Before Submitting PR:**
+- ✅ Self-review your code
+- ✅ Run tests locally
+- ✅ Update documentation
+- ✅ Check for merge conflicts
+- ✅ Remove debug code/console.logs
+- ✅ Run linter
 
 ---
 
@@ -322,17 +477,47 @@ Closes TICKET-123
 - ✅ Use `<button>` for buttons (not `<div>` with click handler)
 - ✅ Use `<a>` for links (with meaningful text, no "click here")
 
+**ARIA (When Semantic HTML Insufficient)**
+- ✅ `aria-label` for elements without visible labels
+- ✅ `aria-labelledby` for associating labels
+- ✅ `aria-describedby` for additional descriptions
+- ✅ `aria-live` for dynamic content updates
+- ✅ `role` when semantic HTML unavailable
+- ❌ Don't override semantic HTML with ARIA unnecessarily
+
 **Keyboard Navigation**
 - ✅ All interactive elements keyboard accessible
 - ✅ Visible focus indicators (outline, border)
 - ✅ Logical tab order
 - ✅ Skip links for navigation
+- ✅ Keyboard shortcuts documented
 - ❌ No keyboard traps
 
 **Color & Contrast**
 - ✅ **Text contrast**: 4.5:1 for normal text, 3:1 for large text
 - ✅ **UI component contrast**: 3:1 for interactive elements
 - ✅ Don't rely on color alone (use icons, patterns, text)
+- ✅ Test with color blindness simulators
+
+**Forms**
+- ✅ Labels for all inputs (`<label for="inputId">`)
+- ✅ Clear error messages
+- ✅ `aria-required` for required fields
+- ✅ `aria-invalid` and error messages for validation
+- ✅ Group related inputs (`<fieldset>` and `<legend>`)
+
+**Images & Media**
+- ✅ `alt` text for all images (empty `alt=""` for decorative)
+- ✅ Transcripts for audio
+- ✅ Captions for video
+- ✅ Audio descriptions for complex video content
+
+**Testing Requirements**
+- ✅ Automated testing (axe, Lighthouse, WAVE)
+- ✅ Keyboard-only testing
+- ✅ Screen reader testing (NVDA, JAWS, VoiceOver)
+- ✅ Zoom to 200% (content must reflow)
+- ✅ Color contrast verification
 
 ---
 
@@ -371,6 +556,36 @@ Target: ≥ 80/100
 - ⚠️ Acceptable: <100 lines
 - ❌ Requires justification: >100 lines
 
+**File Length:**
+- ✅ Preferred: <300 lines
+- ⚠️ Acceptable: <500 lines
+- ❌ Requires justification: >500 lines
+
+**Class/Module Responsibilities:**
+- ✅ Single Responsibility Principle
+- ❌ God classes/modules
+
+### Static Analysis
+
+**Linting (Required):**
+- JavaScript/TypeScript: ESLint
+- Python: Pylint, Flake8, Black
+- Java: Checkstyle, PMD, SpotBugs
+- Go: golangci-lint
+- Ruby: RuboCop
+
+**Linting Rules:**
+- ✅ No warnings in production code
+- ✅ Errors must be fixed before merge
+- ✅ Run in CI/CD pipeline
+- ⚠️ Can disable specific rules with justification in code
+
+**Code Formatting:**
+- ✅ Automated formatting (Prettier, Black, gofmt)
+- ✅ Run on pre-commit hook
+- ✅ Consistent across team
+- ❌ No manual formatting discussions in code review
+
 ---
 
 ## 🚀 API Design Standards
@@ -396,9 +611,11 @@ Target: ≥ 80/100
 - `401 Unauthorized` - Authentication required
 - `403 Forbidden` - Authenticated but not authorized
 - `404 Not Found` - Resource doesn't exist
+- `409 Conflict` - Resource state conflict
 - `422 Unprocessable Entity` - Validation errors
 - `429 Too Many Requests` - Rate limiting
 - `500 Internal Server Error` - Server error
+- `503 Service Unavailable` - Temporary outage
 
 ### URL Structure
 
@@ -413,7 +630,56 @@ https://api.example.com/v1/resources/{id}/sub-resources
 - ✅ Versioning in URL (`/v1/`, `/v2/`)
 - ✅ Filter with query params (`/users?role=admin&active=true`)
 - ✅ Pagination with query params (`/users?page=2&limit=50`)
+- ✅ Sorting with query params (`/users?sort=created_at:desc`)
 - ❌ No file extensions (`/users.json`)
+- ❌ No trailing slashes (`/users/`)
+
+### Request/Response Format
+
+**Request Headers:**
+```
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {token}
+X-Request-ID: {uuid}
+```
+
+**Response Format (Success):**
+```json
+{
+  "data": {
+    "id": "123",
+    "type": "user",
+    "attributes": {
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  },
+  "meta": {
+    "timestamp": "2025-01-11T10:00:00Z"
+  }
+}
+```
+
+**Response Format (Error):**
+```json
+{
+  "errors": [
+    {
+      "code": "VALIDATION_ERROR",
+      "message": "Email is required",
+      "field": "email",
+      "details": {
+        "constraint": "required"
+      }
+    }
+  ],
+  "meta": {
+    "requestId": "abc-123",
+    "timestamp": "2025-01-11T10:00:00Z"
+  }
+}
+```
 
 ### API Documentation
 
@@ -424,6 +690,81 @@ https://api.example.com/v1/resources/{id}/sub-resources
 - ✅ Examples provided
 - ✅ Error codes documented
 - ✅ Interactive documentation (Swagger UI)
+- ✅ Keep documentation up-to-date with code
+
+### Rate Limiting
+
+**Standard Limits:**
+- Authenticated users: 1000 requests/hour
+- Unauthenticated: 100 requests/hour
+- Burst: 10 requests/second
+
+**Response Headers:**
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1640995200
+```
+
+**429 Response:**
+```json
+{
+  "errors": [{
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Rate limit exceeded. Try again in 3600 seconds.",
+    "retryAfter": 3600
+  }]
+}
+```
+
+### Versioning Strategy
+
+**Major Version Changes:**
+- Breaking changes (remove field, change behavior)
+- New major version (`/v2/`)
+- Support old version for 12 months minimum
+
+**Minor Version Changes:**
+- Non-breaking (add field, add endpoint)
+- Same major version
+- Backward compatible
+
+### Pagination
+
+**Cursor-based (Preferred):**
+```
+GET /users?cursor=abc123&limit=50
+```
+
+**Response:**
+```json
+{
+  "data": [...],
+  "pagination": {
+    "nextCursor": "def456",
+    "prevCursor": "xyz789",
+    "hasMore": true
+  }
+}
+```
+
+**Page-based (Simple Use Cases):**
+```
+GET /users?page=2&limit=50
+```
+
+**Response:**
+```json
+{
+  "data": [...],
+  "pagination": {
+    "page": 2,
+    "limit": 50,
+    "total": 1000,
+    "totalPages": 20
+  }
+}
+```
 
 ---
 
@@ -438,19 +779,102 @@ https://api.example.com/v1/resources/{id}/sub-resources
 - ✅ TODOs with ticket references
 - ❌ No redundant comments (code should be self-documenting)
 
+**Function/Method Documentation:**
+
+**JavaScript/TypeScript (JSDoc):**
+```typescript
+/**
+ * Calculate the total price including tax and discounts
+ *
+ * @param {number} basePrice - The base price before tax/discounts
+ * @param {number} taxRate - Tax rate as decimal (e.g., 0.08 for 8%)
+ * @param {number} discountPercent - Discount percentage (0-100)
+ * @returns {number} Final price with tax and discounts applied
+ * @throws {Error} If taxRate or discountPercent are invalid
+ *
+ * @example
+ * const price = calculateTotal(100, 0.08, 10);
+ * // Returns 97.20 (100 - 10% = 90, + 8% tax = 97.20)
+ */
+function calculateTotal(basePrice: number, taxRate: number, discountPercent: number): number {
+  // Implementation
+}
+```
+
+**Python (Docstrings):**
+```python
+def calculate_total(base_price: float, tax_rate: float, discount_percent: float) -> float:
+    """
+    Calculate the total price including tax and discounts.
+
+    Args:
+        base_price: The base price before tax/discounts
+        tax_rate: Tax rate as decimal (e.g., 0.08 for 8%)
+        discount_percent: Discount percentage (0-100)
+
+    Returns:
+        Final price with tax and discounts applied
+
+    Raises:
+        ValueError: If tax_rate or discount_percent are invalid
+
+    Example:
+        >>> calculate_total(100, 0.08, 10)
+        97.20
+    """
+    # Implementation
+```
+
 ### README Requirements
 
 **All repositories must have a comprehensive README:**
 
-- Project name and description
-- Prerequisites
-- Installation instructions
-- Usage examples
-- Configuration options
-- Development setup
-- Testing instructions
-- Deployment guide
-- License information
+```markdown
+# Project Name
+
+Brief description (1-2 sentences)
+
+## Overview
+Detailed description, purpose, key features
+
+## Prerequisites
+- Node.js 18+
+- PostgreSQL 14+
+- etc.
+
+## Installation
+Step-by-step setup instructions
+
+## Usage
+Examples of how to use the project
+
+## Configuration
+Environment variables and config options
+
+## Development
+How to contribute, run tests, etc.
+
+## API Documentation
+Link to OpenAPI/Swagger docs
+
+## Architecture
+High-level architecture overview (link to ADRs)
+
+## Testing
+How to run tests
+
+## Deployment
+Deployment instructions
+
+## Security
+Security considerations, how to report vulnerabilities
+
+## License
+License information
+
+## Contact
+Team/owner contact information
+```
 
 ### Architecture Decision Records (ADRs)
 
@@ -458,12 +882,45 @@ https://api.example.com/v1/resources/{id}/sub-resources
 
 **Location:** `docs/adr/`
 
-**Template includes:**
-- Status (Proposed, Accepted, Deprecated)
-- Context (problem description)
-- Decision (what was decided)
-- Consequences (trade-offs)
-- Alternatives considered
+**Template:**
+```markdown
+# ADR-001: Use PostgreSQL for Primary Database
+
+## Status
+Accepted
+
+## Context
+We need a relational database for storing user data, transactions, and analytics.
+Requirements:
+- ACID compliance
+- Complex query support
+- JSON support for flexible schemas
+- Strong community support
+
+## Decision
+We will use PostgreSQL 14+ as our primary database.
+
+## Consequences
+**Positive:**
+- Strong ACID guarantees
+- Excellent JSON support (JSONB)
+- Rich extension ecosystem
+- Strong community and tooling
+
+**Negative:**
+- Vertical scaling limitations
+- More complex operations than NoSQL for some use cases
+- Requires careful index management
+
+**Neutral:**
+- Need to train team on PostgreSQL best practices
+- Must implement proper backup/restore procedures
+
+## Alternatives Considered
+- MySQL: Less robust JSON support
+- MongoDB: No ACID guarantees across documents
+- DynamoDB: Vendor lock-in, less flexible querying
+```
 
 ---
 
@@ -479,12 +936,35 @@ https://api.example.com/v1/resources/{id}/sub-resources
 - ✅ Check code coverage
 - ✅ Security scanning (Snyk, Dependabot)
 - ✅ Build application
+- ✅ Deploy to preview environment
 
 **On Merge to Main:**
 - ✅ All PR checks plus:
 - ✅ Deploy to staging
 - ✅ Run E2E tests against staging
 - ✅ Performance testing
+- ✅ Tag release
+
+**On Release Tag:**
+- ✅ Deploy to production
+- ✅ Smoke tests
+- ✅ Rollback capability
+
+### Environment Strategy
+
+**Environments:**
+
+| Environment | Purpose | Branch | Access |
+|-------------|---------|--------|--------|
+| **Development** | Local development | feature/* | Developers |
+| **Preview** | PR preview | PR branch | Reviewers |
+| **Staging** | Pre-production testing | develop | QA + Team |
+| **Production** | Live system | main | Restricted |
+
+**Environment Parity:**
+- ✅ Staging mirrors production (same versions, configs)
+- ✅ Use same deployment process
+- ✅ Same monitoring and logging
 
 ### Monitoring & Observability
 
@@ -500,6 +980,31 @@ https://api.example.com/v1/resources/{id}/sub-resources
 - ✅ Centralized logging (ELK, CloudWatch, etc.)
 - ❌ No sensitive data in logs
 
+**Alerting:**
+- ✅ Error rate thresholds
+- ✅ Response time thresholds
+- ✅ Availability monitoring
+- ✅ Security alerts
+- ✅ Escalation policies
+
+### Deployment Best Practices
+
+**Zero-Downtime Deployments:**
+- ✅ Blue-green deployments or rolling updates
+- ✅ Database migrations backward compatible
+- ✅ Feature flags for gradual rollout
+- ✅ Automated rollback capability
+
+**Deployment Checklist:**
+- [ ] All tests passing
+- [ ] Security scans passed
+- [ ] Database migrations tested
+- [ ] Configuration reviewed
+- [ ] Monitoring alerts configured
+- [ ] Rollback plan documented
+- [ ] Team notified
+- [ ] Post-deployment verification plan
+
 ---
 
 ## 🔐 Data Privacy & Compliance
@@ -513,13 +1018,51 @@ https://api.example.com/v1/resources/{id}/sub-resources
 - ✅ **Consent**: Obtain explicit consent before collection
 - ✅ **Right to access**: Users can request their data
 - ✅ **Right to deletion**: Users can request data deletion
+- ✅ **Data portability**: Export user data in standard format
 - ✅ **Breach notification**: Report breaches within 72 hours
 
 **PII (Personally Identifiable Information):**
 - ✅ Encrypt PII at rest (AES-256)
 - ✅ Encrypt PII in transit (TLS 1.3)
+- ✅ Tokenize/pseudonymize where possible
+- ✅ Access logging for PII access
 - ❌ Never log PII (names, emails, SSN, addresses, etc.)
 - ❌ Never commit PII to version control
+- ❌ No PII in error messages or stack traces
+
+### Data Retention
+
+**Retention Policies:**
+
+| Data Type | Retention Period | Deletion Method |
+|-----------|------------------|-----------------|
+| User accounts (active) | Until user deletion request | Hard delete + anonymize analytics |
+| User accounts (inactive) | 3 years | Hard delete |
+| Logs (application) | 90 days | Automated deletion |
+| Logs (security) | 1 year | Automated deletion |
+| Backups | 30 days | Automated deletion |
+| Analytics (anonymized) | 2 years | Automated deletion |
+
+---
+
+## 🎓 Learning & Development
+
+### Onboarding Requirements
+
+**All new engineers must complete:**
+
+1. Security training (OWASP Top 10)
+2. Accessibility training (WCAG 2.1)
+3. Code review training
+4. Testing best practices
+5. Git workflow training
+
+### Continuous Learning
+
+- ✅ Lunch & learns (bi-weekly)
+- ✅ Conference attendance budget ($2000/year/engineer)
+- ✅ Training budget ($1000/year/engineer)
+- ✅ Knowledge sharing (internal tech talks)
 
 ---
 
@@ -548,6 +1091,18 @@ https://api.example.com/v1/resources/{id}/sub-resources
 4. **Add TODO** to address technical debt
 5. **Track** in technical debt backlog
 
+**Exception Template:**
+```markdown
+## Standards Exception Request
+
+**Standard**: [e.g., "80% test coverage requirement"]
+**Reason**: [e.g., "Legacy code without tests, high risk to add tests now"]
+**Proposed Alternative**: [e.g., "Add tests incrementally as we modify code"]
+**Timeline**: [e.g., "6 months"]
+**Approved By**: [Name, Date]
+**Tracking**: [TICKET-ID]
+```
+
 ---
 
 ## 🔄 Updates & Feedback
@@ -572,7 +1127,20 @@ https://api.example.com/v1/resources/{id}/sub-resources
 
 ---
 
+## 📞 Support & Questions
+
+**Questions about these standards?**
+- Engineering Leadership Team
+- #engineering-standards Slack channel
+- Monthly office hours (first Friday of each month)
+
+**Reporting violations:**
+- Discuss in code review
+- Escalate to tech lead if needed
+- Anonymous reporting via [link to form]
+
+---
+
 *Last Updated: 2025-01-11*
 *Version: 1.0.0*
-*Status: ✅ Active - Protected across all projects*
-*Distribution: Via Claude-Config installation*
+*Maintained by: Engineering Leadership*

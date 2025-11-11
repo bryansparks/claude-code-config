@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+
+# pre-push hook - Check test coverage and send metrics before push
+# This hook runs before git push
+
+# Configuration
+METRICS_API_URL="${METRICS_API_URL:-http://localhost:3001/api}"
+COVERAGE_THRESHOLD="${COVERAGE_THRESHOLD:-90}"
+LOG_FILE="${HOME}/.claude/logs/git-metrics.log"
+
+# Get repository information
+REPO_NAME=$(basename $(git rev-parse --show-toplevel))
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+COMMIT_SHA=$(git rev-parse HEAD)
+AUTHOR_EMAIL=$(git config user.email)
+
+echo "🧪 Running tests and checking coverage..."
+
+# Detect project type and run appropriate coverage command
+COVERAGE_CMD=""
+COVERAGE_FILE=""
+
+if [ -f "package.json" ]; then
+  # Node.js project
+  if grep -q "jest" package.json; then
+    COVERAGE_CMD="npm test -- --coverage --silent"
+    COVERAGE_FILE="coverage/coverage-summary.json"
+  elif grep -q "vitest" package.json; then
+    COVERAGE_CMD="npm test -- --coverage --silent"
+    COVERAGE_FILE="coverage/coverage-summary.json"
+  fi
+elif [ -f "pytest.ini" ] || [ -f "pyproject.toml" ]; then
+  # Python project
+  COVERAGE_CMD="pytest --cov --cov-report=json --quiet"
+  COVERAGE_FILE="coverage.json"
+elif [ -f "pom.xml" ]; then
+  # Java project
+  COVERAGE_CMD="mvn test jacoco:report -q"
+  COVERAGE_FILE="target/site/jacoco/jacoco.xml"
+elif [ -f "go.mod" ]; then
+  # Go project
+  COVERAGE_CMD="go test -coverprofile=coverage.out ./..."
+  COVERAGE_FILE="coverage.out"
+fi
+
+if [ -z "$COVERAGE_CMD" ]; then
+  echo "⚠️  Could not detect test framework - skipping coverage check"
+  exit 0
+fi
+
+# Run tests
+if ! eval "$COVERAGE_CMD" > /tmp/test-output.log 2>&1; then
+  echo "❌ Tests failed! Please fix failing tests before pushing."
+  echo ""
+  echo "Test output:"
+  cat /tmp/test-output.log
+  exit 1
+fi
+
+echo "✅ All tests passed!"
+
+# Parse coverage
+COVERAGE_PERCENT=0
+
+if [ -f "$COVERAGE_FILE" ]; then
+  # Parse coverage based on format
+  if [[ "$COVERAGE_FILE" == *.json ]]; then
+    # JSON format (Jest/Vitest)
+    COVERAGE_PERCENT=$(cat "$COVERAGE_FILE" | grep -o '"statements":[^,}]*' | grep -o '[0-9.]*' | head -1)
+  elif [[ "$COVERAGE_FILE" == *.xml ]]; then
+    # XML format (JaCoCo)
+    COVERAGE_PERCENT=$(grep -o 'counter type="INSTRUCTION".*missed="[0-9]*".*covered="[0-9]*"' "$COVERAGE_FILE" | head -1 | awk -F'[="]' '{print ($5/($3+$5))*100}')
+  elif [[ "$COVERAGE_FILE" == *.out ]]; then
+    # Go coverage format
+    COVERAGE_PERCENT=$(go tool cover -func="$COVERAGE_FILE" | grep total | awk '{print $3}' | sed 's/%//')
+  fi
+
+  echo "📊 Test coverage: ${COVERAGE_PERCENT}%"
+
+  # Check if coverage meets threshold
+  if (( $(echo "$COVERAGE_PERCENT < $COVERAGE_THRESHOLD" | bc -l) )); then
+    echo "⚠️  Warning: Coverage (${COVERAGE_PERCENT}%) is below threshold (${COVERAGE_THRESHOLD}%)"
+    echo ""
+    read -p "Do you want to push anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      echo "❌ Push aborted. Please improve test coverage."
+      exit 1
+    fi
+  else
+    echo "✅ Coverage meets threshold (${COVERAGE_THRESHOLD}%)"
+  fi
+
+  # Send coverage data to metrics API
+  JSON_PAYLOAD=$(cat <<EOF
+{
+  "repository_name": "$REPO_NAME",
+  "branch": "$BRANCH",
+  "commit_sha": "$COMMIT_SHA",
+  "coverage_statements": $COVERAGE_PERCENT,
+  "coverage_branches": $COVERAGE_PERCENT,
+  "coverage_functions": $COVERAGE_PERCENT,
+  "coverage_lines": $COVERAGE_PERCENT,
+  "total_tests": 0,
+  "passing_tests": 0,
+  "failing_tests": 0,
+  "execution_time_seconds": 0
+}
+EOF
+)
+
+  # Log locally
+  mkdir -p "$(dirname "$LOG_FILE")"
+  echo "$JSON_PAYLOAD" >> "$LOG_FILE"
+
+  # Send to metrics API (don't block on failure)
+  curl -s -X POST \
+    -H "Content-Type: application/json" \
+    -d "$JSON_PAYLOAD" \
+    "$METRICS_API_URL/test-coverage" \
+    > /dev/null 2>&1 &
+
+else
+  echo "⚠️  Could not find coverage file - skipping coverage report"
+fi
+
+exit 0

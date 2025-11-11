@@ -151,6 +151,12 @@ install_files() {
                 mkdir -p "$INSTALL_DIR/agents/$persona"
                 cp -r personas/$persona/subagents/* "$INSTALL_DIR/agents/$persona/" 2>/dev/null || true
             fi
+
+            # Copy persona skills
+            if [ -d "personas/$persona/skills" ]; then
+                mkdir -p "$INSTALL_DIR/skills"
+                cp -r personas/$persona/skills/* "$INSTALL_DIR/skills/" 2>/dev/null || true
+            fi
         fi
     else
         # Install all personas
@@ -160,6 +166,11 @@ install_files() {
                 cp -r personas/$p/hooks/* "$INSTALL_DIR/hooks/" 2>/dev/null || true
                 mkdir -p "$INSTALL_DIR/agents/$p"
                 cp -r personas/$p/subagents/* "$INSTALL_DIR/agents/$p/" 2>/dev/null || true
+                # Copy skills if they exist
+                if [ -d "personas/$p/skills" ]; then
+                    mkdir -p "$INSTALL_DIR/skills"
+                    cp -r personas/$p/skills/* "$INSTALL_DIR/skills/" 2>/dev/null || true
+                fi
             fi
         done
         chmod +x "$INSTALL_DIR/hooks"/*.sh 2>/dev/null || true

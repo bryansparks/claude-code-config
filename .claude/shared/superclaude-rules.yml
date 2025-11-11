@@ -1,0 +1,752 @@
+# SuperClaude Rules Configuration
+# Version: 1.0.0
+# Purpose: Development practices, security standards, and efficiency management
+
+---
+
+Development_Practices:
+  description: "Coding standards and best practices across all personas"
+
+  code_quality:
+    readability:
+      - "Clear, descriptive variable and function names"
+      - "Consistent naming conventions per language"
+      - "Self-documenting code preferred over comments"
+      - "Comments explain 'why', code shows 'what'"
+      - "Maximum function length: 50 lines (guideline)"
+      - "Maximum cyclomatic complexity: 10 per function"
+
+    solid_principles:
+      single_responsibility:
+        description: "Each class/function should have one reason to change"
+        example: "UserService handles user operations, not email sending"
+
+      open_closed:
+        description: "Open for extension, closed for modification"
+        example: "Use interfaces and polymorphism for extensibility"
+
+      liskov_substitution:
+        description: "Subtypes must be substitutable for base types"
+        example: "Square extending Rectangle is a violation"
+
+      interface_segregation:
+        description: "Many specific interfaces over one general interface"
+        example: "Readable, Writable interfaces vs ReadWritable"
+
+      dependency_inversion:
+        description: "Depend on abstractions, not concretions"
+        example: "Use interfaces, inject dependencies"
+
+    design_patterns:
+      creational:
+        - "Factory: Object creation logic"
+        - "Builder: Complex object construction"
+        - "Singleton: Single instance (use sparingly)"
+
+      structural:
+        - "Adapter: Interface compatibility"
+        - "Decorator: Add behavior dynamically"
+        - "Facade: Simplified interface to complex system"
+
+      behavioral:
+        - "Strategy: Interchangeable algorithms"
+        - "Observer: Event notification"
+        - "Command: Encapsulate requests"
+
+    code_smells_to_avoid:
+      - "Long methods (>50 lines)"
+      - "Large classes (>300 lines)"
+      - "Duplicate code (DRY principle)"
+      - "Feature envy (method uses another class more than its own)"
+      - "Data clumps (same group of parameters everywhere)"
+      - "Primitive obsession (use value objects)"
+      - "Switch statements (consider polymorphism)"
+
+  testing_standards:
+    unit_tests:
+      coverage: "≥80% minimum"
+      principles:
+        - "Test behavior, not implementation"
+        - "One assertion per test (guideline)"
+        - "Arrange-Act-Assert pattern"
+        - "Tests should be fast (<100ms each)"
+        - "Tests should be independent"
+
+      naming_convention: "test_should_<expected behavior>_when_<condition>"
+      example: "test_should_return_user_when_valid_id_provided"
+
+    integration_tests:
+      coverage: "≥60% for critical paths"
+      focus:
+        - "API endpoint testing"
+        - "Database integration"
+        - "External service integration"
+        - "Authentication flows"
+
+    e2e_tests:
+      coverage: "All critical user journeys"
+      focus:
+        - "Happy path scenarios"
+        - "Authentication and authorization"
+        - "Core business workflows"
+        - "Error handling and recovery"
+
+    test_data:
+      - "Use factories for test data generation"
+      - "Keep test data minimal and focused"
+      - "Clean up after tests (transaction rollback)"
+      - "Use realistic data volumes"
+      - "Avoid hardcoded test data when possible"
+
+  documentation:
+    code_comments:
+      when_to_comment:
+        - "Complex algorithms requiring explanation"
+        - "Non-obvious business logic"
+        - "Workarounds or hacks (with reason)"
+        - "Public API methods"
+
+      when_not_to_comment:
+        - "Obvious code (self-documenting)"
+        - "Repeating method name in comment"
+        - "Outdated or incorrect comments"
+
+    api_documentation:
+      - "OpenAPI/Swagger for REST APIs"
+      - "GraphQL schema documentation"
+      - "Request/response examples"
+      - "Error codes and meanings"
+      - "Rate limiting information"
+      - "Authentication requirements"
+
+    architecture_documentation:
+      required_files:
+        - "README.md: Project overview and setup"
+        - "ARCHITECTURE.md: System design and components"
+        - "API.md: API endpoints and contracts"
+        - "RUNBOOK.md: Operational procedures"
+
+    inline_documentation:
+      - "JSDoc for JavaScript/TypeScript"
+      - "Javadoc for Java"
+      - "Docstrings for Python"
+      - "XML comments for C#"
+
+  version_control:
+    branch_strategy:
+      gitflow:
+        main: "Production-ready code (protected)"
+        develop: "Integration branch (protected)"
+        feature: "feature/[ticket-id]-description"
+        hotfix: "hotfix/[ticket-id]-description"
+        release: "release/[version]"
+
+      github_flow:
+        main: "Production-ready code (protected)"
+        feature: "feature/[description]"
+        note: "Simpler, continuous deployment"
+
+    commit_messages:
+      format: |
+        <type>(<scope>): <subject>
+
+        <body>
+
+        <footer>
+
+      types:
+        - "feat: New feature"
+        - "fix: Bug fix"
+        - "docs: Documentation changes"
+        - "style: Formatting, no code change"
+        - "refactor: Code restructuring"
+        - "test: Adding or updating tests"
+        - "chore: Maintenance tasks"
+
+      examples:
+        good:
+          - "feat(auth): add OAuth 2.0 login support"
+          - "fix(api): resolve race condition in user creation"
+          - "refactor(db): optimize user query performance"
+
+        bad:
+          - "updated stuff"
+          - "fixed bug"
+          - "WIP"
+
+    pull_requests:
+      requirements:
+        - "All CI checks pass (tests, linting, security)"
+        - "Minimum 1 peer review approval"
+        - "Code coverage ≥80% for new code"
+        - "No merge conflicts"
+        - "PR description includes: What, Why, How, Testing"
+
+      description_template: |
+        ## What
+        Brief description of changes
+
+        ## Why
+        Business or technical rationale
+
+        ## How
+        Technical approach and key decisions
+
+        ## Testing
+        How to test these changes
+
+        ## Screenshots (if UI changes)
+        Before/after images
+
+      size_guidelines:
+        small: "<200 lines (preferred)"
+        medium: "200-500 lines"
+        large: "500-1000 lines (needs justification)"
+        too_large: ">1000 lines (split into smaller PRs)"
+
+  code_review:
+    reviewer_checklist:
+      correctness:
+        - "[ ] Logic is correct for all inputs"
+        - "[ ] Edge cases are handled"
+        - "[ ] Error conditions are managed"
+        - "[ ] No obvious bugs or issues"
+
+      security:
+        - "[ ] Input validation present"
+        - "[ ] No SQL injection vulnerabilities"
+        - "[ ] No XSS vulnerabilities"
+        - "[ ] Authentication/authorization correct"
+        - "[ ] Secrets not hardcoded"
+
+      performance:
+        - "[ ] No N+1 query problems"
+        - "[ ] Appropriate indexing"
+        - "[ ] Efficient algorithms"
+        - "[ ] No memory leaks"
+
+      maintainability:
+        - "[ ] Code is readable"
+        - "[ ] SOLID principles followed"
+        - "[ ] No code duplication"
+        - "[ ] Appropriate abstractions"
+        - "[ ] Tests are comprehensive"
+
+    response_times:
+      blocking_pr: "4 hours"
+      normal_pr: "24 hours"
+      low_priority: "48 hours"
+
+    feedback_style:
+      - "Be constructive and specific"
+      - "Explain the 'why' behind suggestions"
+      - "Distinguish between: must-fix, should-fix, nit, question"
+      - "Acknowledge good code and patterns"
+      - "Focus on code, not the person"
+
+---
+
+Security_Standards:
+  description: "Security best practices and OWASP Top 10 prevention"
+
+  owasp_top_10:
+    broken_access_control:
+      risks:
+        - "Users accessing unauthorized data"
+        - "Privilege escalation"
+        - "IDOR (Insecure Direct Object Reference)"
+
+      prevention:
+        - "Implement RBAC (Role-Based Access Control)"
+        - "Default deny access"
+        - "Validate user permissions on every request"
+        - "Use UUIDs instead of sequential IDs"
+        - "Log access control failures"
+
+      code_example: |
+        # Bad: No authorization check
+        @app.route('/user/<user_id>')
+        def get_user(user_id):
+            return User.query.get(user_id)
+
+        # Good: Authorization check
+        @app.route('/user/<user_id>')
+        @require_auth
+        def get_user(user_id):
+            user = User.query.get(user_id)
+            if current_user.id != user.id and not current_user.is_admin:
+                abort(403)
+            return user
+
+    cryptographic_failures:
+      risks:
+        - "Sensitive data exposure"
+        - "Weak encryption"
+        - "Insecure key management"
+
+      prevention:
+        - "Use TLS 1.3 for data in transit"
+        - "Use AES-256 for data at rest"
+        - "Use bcrypt/Argon2 for password hashing"
+        - "Never store plain-text passwords"
+        - "Rotate encryption keys regularly"
+        - "Use environment variables for secrets"
+
+      code_example: |
+        # Bad: Plain-text password
+        user.password = request.form['password']
+
+        # Good: Hashed password
+        from werkzeug.security import generate_password_hash
+        user.password_hash = generate_password_hash(request.form['password'])
+
+    injection:
+      risks:
+        - "SQL injection"
+        - "Command injection"
+        - "NoSQL injection"
+        - "LDAP injection"
+
+      prevention:
+        - "Use parameterized queries (prepared statements)"
+        - "Use ORMs (with caution on raw queries)"
+        - "Input validation and sanitization"
+        - "Principle of least privilege for DB users"
+        - "Escape special characters"
+
+      code_example: |
+        # Bad: SQL injection vulnerable
+        query = f"SELECT * FROM users WHERE email = '{email}'"
+
+        # Good: Parameterized query
+        query = "SELECT * FROM users WHERE email = %s"
+        cursor.execute(query, (email,))
+
+    insecure_design:
+      risks:
+        - "Missing security controls by design"
+        - "Weak threat modeling"
+        - "Missing rate limiting"
+
+      prevention:
+        - "Security requirements in design phase"
+        - "Threat modeling for sensitive features"
+        - "Rate limiting on all APIs"
+        - "Input validation at boundaries"
+        - "Defense in depth"
+
+    security_misconfiguration:
+      risks:
+        - "Default credentials"
+        - "Unnecessary features enabled"
+        - "Verbose error messages"
+        - "Missing security headers"
+
+      prevention:
+        - "Remove default accounts"
+        - "Disable unnecessary features"
+        - "Generic error messages to users"
+        - "Detailed logs server-side only"
+        - "Security headers (CSP, X-Frame-Options, etc.)"
+
+      security_headers:
+        - "Content-Security-Policy"
+        - "X-Content-Type-Options: nosniff"
+        - "X-Frame-Options: DENY"
+        - "Strict-Transport-Security"
+        - "X-XSS-Protection: 1; mode=block"
+
+    vulnerable_components:
+      risks:
+        - "Known vulnerabilities in dependencies"
+        - "Outdated libraries"
+        - "Unmaintained packages"
+
+      prevention:
+        - "Keep dependencies updated"
+        - "Use Dependabot/Renovate for automated updates"
+        - "Run security scans (Snyk, npm audit, pip-audit)"
+        - "Review security advisories regularly"
+        - "Remove unused dependencies"
+
+    authentication_failures:
+      risks:
+        - "Weak password policies"
+        - "Credential stuffing"
+        - "Session hijacking"
+        - "Weak session management"
+
+      prevention:
+        - "Strong password policy (min 12 chars)"
+        - "Multi-factor authentication (MFA)"
+        - "Rate limiting on login attempts"
+        - "Secure session tokens (httpOnly, secure, sameSite)"
+        - "Session timeout (30 minutes inactivity)"
+        - "Password breach detection (HaveIBeenPwned)"
+
+    software_data_integrity_failures:
+      risks:
+        - "Insecure CI/CD pipeline"
+        - "Unsigned packages"
+        - "Tampered updates"
+
+      prevention:
+        - "Verify package signatures"
+        - "Use lock files (package-lock.json, poetry.lock)"
+        - "Secure CI/CD pipeline"
+        - "Code signing"
+        - "Integrity checks (checksums)"
+
+    security_logging_failures:
+      risks:
+        - "Insufficient logging"
+        - "Logs not monitored"
+        - "Missing audit trail"
+
+      prevention:
+        - "Log authentication events"
+        - "Log authorization failures"
+        - "Log input validation failures"
+        - "Include correlation IDs"
+        - "Centralized logging (ELK, Splunk)"
+        - "Real-time alerting for security events"
+
+    ssrf:
+      risks:
+        - "Server-Side Request Forgery"
+        - "Access to internal services"
+        - "Cloud metadata access"
+
+      prevention:
+        - "Whitelist allowed URLs/IPs"
+        - "Block private IP ranges"
+        - "Validate and sanitize URLs"
+        - "Use network segmentation"
+
+  authentication:
+    password_policy:
+      minimum_length: 12
+      requirements:
+        - "At least 1 uppercase letter"
+        - "At least 1 lowercase letter"
+        - "At least 1 number"
+        - "At least 1 special character"
+      expiration: "90 days (for sensitive systems)"
+      history: "Last 5 passwords remembered"
+
+    mfa:
+      requirement: "Mandatory for production access"
+      methods:
+        - "TOTP (Time-based One-Time Password)"
+        - "SMS (least secure, avoid if possible)"
+        - "Hardware token (most secure)"
+        - "Biometric (with device support)"
+
+    jwt_best_practices:
+      - "Short expiration (15 minutes for access tokens)"
+      - "Longer expiration for refresh tokens (7 days)"
+      - "Include minimal claims (no PII if possible)"
+      - "Sign with RS256 (asymmetric) for microservices"
+      - "Validate signature, issuer, audience, expiration"
+      - "Use refresh token rotation"
+
+  authorization:
+    rbac:
+      description: "Role-Based Access Control"
+      roles:
+        - "Admin: Full system access"
+        - "User: Standard user access"
+        - "Guest: Limited read-only access"
+
+      implementation:
+        - "Check permissions on every request"
+        - "Principle of least privilege"
+        - "Default deny all access"
+
+    abac:
+      description: "Attribute-Based Access Control (for complex scenarios)"
+      attributes:
+        - "User attributes (department, clearance)"
+        - "Resource attributes (classification, owner)"
+        - "Environmental (time, location)"
+
+  data_protection:
+    pii_handling:
+      definition: "Personally Identifiable Information"
+      examples:
+        - "Email, phone number"
+        - "Address, SSN"
+        - "Financial information"
+        - "Health records"
+
+      requirements:
+        - "Encrypt at rest (AES-256)"
+        - "Encrypt in transit (TLS 1.3)"
+        - "Minimize data collection"
+        - "Data retention policies"
+        - "Right to deletion (GDPR)"
+        - "Audit access to PII"
+
+    encryption:
+      at_rest: "AES-256-GCM"
+      in_transit: "TLS 1.3"
+      key_management: "Use AWS KMS, Azure Key Vault, or HashiCorp Vault"
+      key_rotation: "Every 90 days"
+
+  secrets_management:
+    never_commit:
+      - "API keys and tokens"
+      - "Database passwords"
+      - "Private keys"
+      - "OAuth client secrets"
+      - ".env files (unless template)"
+
+    storage:
+      - "Environment variables"
+      - "Secret management services (AWS Secrets Manager, Vault)"
+      - "Encrypted config files (with key in secure storage)"
+
+    rotation:
+      - "Rotate secrets every 90 days"
+      - "Immediate rotation if compromised"
+      - "Automated rotation where possible"
+
+---
+
+Efficiency_Management:
+  description: "Performance, optimization, and resource management"
+
+  performance_standards:
+    api_response_times:
+      p50: "<100ms"
+      p95: "<500ms"
+      p99: "<1000ms"
+      timeout: "30 seconds"
+
+    frontend_metrics:
+      lcp: "<2.5s (Largest Contentful Paint)"
+      fid: "<100ms (First Input Delay)"
+      cls: "<0.1 (Cumulative Layout Shift)"
+      ttfb: "<400ms (Time to First Byte)"
+
+    database:
+      query_time_p95: "<100ms"
+      query_time_p99: "<500ms"
+      connection_pool: "10-50 connections (tune based on load)"
+      index_all_foreign_keys: true
+
+  optimization_techniques:
+    database:
+      indexing:
+        - "Index foreign keys"
+        - "Index WHERE clause columns"
+        - "Index ORDER BY columns"
+        - "Composite indexes for multi-column queries"
+        - "Avoid over-indexing (write performance)"
+
+      query_optimization:
+        - "Use EXPLAIN to analyze query plans"
+        - "Avoid SELECT * (select only needed columns)"
+        - "Use JOINs instead of N+1 queries"
+        - "Paginate large result sets"
+        - "Use connection pooling"
+
+      caching:
+        - "Cache frequently accessed data (Redis)"
+        - "Cache invalidation strategy"
+        - "Cache warm-up on startup"
+        - "Cache aside pattern"
+
+    api:
+      - "Rate limiting (prevent abuse)"
+      - "Response compression (gzip, brotli)"
+      - "HTTP caching headers (ETag, Cache-Control)"
+      - "API pagination for large datasets"
+      - "GraphQL for flexible data fetching"
+
+    frontend:
+      - "Code splitting (lazy loading)"
+      - "Image optimization (WebP, lazy loading)"
+      - "Minification and bundling"
+      - "CDN for static assets"
+      - "Service workers for offline support"
+      - "Tree shaking (remove unused code)"
+
+    backend:
+      - "Async processing for heavy tasks"
+      - "Message queues for background jobs"
+      - "Database connection pooling"
+      - "Caching (Redis, Memcached)"
+      - "Load balancing"
+      - "Horizontal scaling"
+
+  monitoring_observability:
+    logging:
+      format: "Structured JSON logs"
+      levels:
+        - "DEBUG: Development only"
+        - "INFO: General information"
+        - "WARN: Warning conditions"
+        - "ERROR: Error conditions"
+        - "FATAL: Critical failures"
+
+      required_fields:
+        - "timestamp"
+        - "level"
+        - "message"
+        - "correlation_id"
+        - "user_id (if applicable)"
+        - "service_name"
+        - "environment"
+
+    metrics:
+      types:
+        - "Counters (requests, errors)"
+        - "Gauges (memory, CPU)"
+        - "Histograms (latency)"
+        - "Summaries (request duration)"
+
+      key_metrics:
+        - "Request rate (requests/sec)"
+        - "Error rate (%)"
+        - "Latency (p50, p95, p99)"
+        - "Saturation (CPU, memory, disk)"
+
+    tracing:
+      - "Distributed tracing with OpenTelemetry"
+      - "Trace all external calls"
+      - "Include span context in logs"
+      - "Sample traces appropriately (1-10%)"
+
+    alerting:
+      severity_levels:
+        p0: "Critical - immediate response (PagerDuty)"
+        p1: "High - response within 1 hour (PagerDuty)"
+        p2: "Medium - response within 4 hours (Slack)"
+        p3: "Low - response within 24 hours (Slack)"
+
+      alert_criteria:
+        - "Error rate >5% for 5 minutes (P0)"
+        - "p95 latency >1000ms for 10 minutes (P1)"
+        - "CPU >80% for 15 minutes (P2)"
+        - "Disk >85% usage (P2)"
+
+  scalability:
+    horizontal_scaling:
+      - "Stateless application design"
+      - "Externalize session storage"
+      - "Use load balancers"
+      - "Auto-scaling based on metrics"
+
+    vertical_scaling:
+      - "Increase CPU/memory as needed"
+      - "Temporary solution before horizontal scaling"
+      - "Limited by hardware constraints"
+
+    database_scaling:
+      - "Read replicas for read-heavy workloads"
+      - "Sharding for write-heavy workloads"
+      - "Caching to reduce database load"
+      - "Connection pooling"
+
+  resource_management:
+    memory:
+      - "Avoid memory leaks (close connections, clear caches)"
+      - "Use streaming for large files"
+      - "Implement pagination"
+      - "Monitor heap usage"
+
+    connections:
+      - "Use connection pooling"
+      - "Close connections properly"
+      - "Set connection timeouts"
+      - "Limit max connections"
+
+    threads:
+      - "Use thread pools"
+      - "Avoid blocking operations"
+      - "Use async/await for I/O"
+      - "Set appropriate thread pool sizes"
+
+---
+
+CI_CD_Standards:
+  description: "Continuous Integration and Deployment best practices"
+
+  ci_pipeline:
+    stages:
+      - "Checkout code"
+      - "Install dependencies"
+      - "Linting and formatting checks"
+      - "Unit tests"
+      - "Integration tests"
+      - "Security scanning (SAST)"
+      - "Build artifacts"
+      - "Deploy to staging (on main branch)"
+
+    quality_gates:
+      - "All tests pass (no flaky tests allowed)"
+      - "Code coverage ≥80%"
+      - "No critical security vulnerabilities"
+      - "Linting passes"
+      - "No merge conflicts"
+
+    speed_targets:
+      - "Full CI run <10 minutes"
+      - "Unit tests <2 minutes"
+      - "Lint checks <1 minute"
+
+  cd_pipeline:
+    deployment_strategies:
+      blue_green:
+        description: "Two identical environments, switch traffic"
+        benefits: "Instant rollback, zero downtime"
+        use_case: "Production deployments"
+
+      canary:
+        description: "Gradual rollout to subset of users"
+        benefits: "Early issue detection, reduced blast radius"
+        use_case: "High-risk changes"
+
+      rolling:
+        description: "Update instances one at a time"
+        benefits: "Simple, no extra infrastructure"
+        use_case: "Standard deployments"
+
+    rollback:
+      automatic_triggers:
+        - "Health check failures"
+        - "Error rate >10%"
+        - "Deployment timeout (15 minutes)"
+
+      manual_process:
+        - "One-click rollback in CD tool"
+        - "Rollback within 5 minutes"
+        - "Post-rollback incident review"
+
+  environments:
+    development:
+      purpose: "Local development"
+      data: "Synthetic test data"
+      deployment: "Manual"
+
+    testing:
+      purpose: "Automated testing"
+      data: "Test fixtures"
+      deployment: "Automatic on feature branches"
+
+    staging:
+      purpose: "Pre-production validation"
+      data: "Production-like data (anonymized)"
+      deployment: "Automatic on main branch"
+
+    production:
+      purpose: "Customer-facing"
+      data: "Real production data"
+      deployment: "Manual approval required"
+
+---
+
+Version: 1.0.0
+Status: Active
+Last Updated: 2025-11-11

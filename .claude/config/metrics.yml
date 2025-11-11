@@ -1,0 +1,175 @@
+# Metrics Configuration
+# This controls whether metrics are collected and how they're stored
+
+# ==============================================================================
+# METRICS MODE
+# ==============================================================================
+# Options:
+#   - disabled: No metrics collection (default)
+#   - local: Local JSON files only (lightweight, no infrastructure)
+#   - centralized: Full dashboard with database (requires setup)
+
+metrics_mode: disabled
+
+# ==============================================================================
+# LOCAL METRICS (when metrics_mode: local)
+# ==============================================================================
+local_metrics:
+  enabled: false
+
+  # Where to store local metrics
+  storage_path: ~/.claude/metrics
+
+  # What to track
+  track:
+    skill_usage: true              # Which skills are invoked
+    execution_time: true           # How long each skill takes
+    file_counts: true              # Number of files processed
+    success_failure: true          # Success/error rates
+
+  # What NOT to track (privacy)
+  exclude:
+    file_contents: true            # Never log actual code
+    commit_messages: true          # Don't log commit messages
+    file_paths: true               # Only log counts, not paths
+    user_prompts: true             # Don't log what user typed
+
+  # Retention
+  retention_days: 90               # Auto-delete logs older than 90 days
+
+  # Output format
+  format: json                     # json or csv
+
+  # Analysis
+  generate_weekly_report: false    # Auto-generate weekly summary
+  report_path: ~/.claude/metrics/reports
+
+# ==============================================================================
+# CENTRALIZED METRICS (when metrics_mode: centralized)
+# ==============================================================================
+centralized_metrics:
+  enabled: false
+
+  # Database connection (only needed if centralized mode enabled)
+  database:
+    host: localhost
+    port: 5432
+    name: metrics_dashboard
+    user: postgres
+    # password: Set via METRICS_DB_PASSWORD environment variable
+
+  # API endpoint
+  api_url: http://localhost:3001/api
+
+  # Real-time updates
+  websocket_enabled: true
+
+  # What to send
+  send:
+    skill_usage: true
+    quality_metrics: true
+    test_coverage: true
+    security_scans: true
+    accessibility_audits: true
+
+  # Privacy controls
+  anonymize_user_data: false       # Set true to send only anonymized data
+  aggregate_before_send: false     # Set true to send only daily aggregates
+
+  # Retry policy
+  retry_failed_sends: true
+  max_retries: 3
+
+# ==============================================================================
+# SKILL-SPECIFIC METRICS
+# ==============================================================================
+skills:
+  code-review:
+    track_metrics: false
+    capture_issues_found: false
+
+  debug-analysis:
+    track_metrics: false
+    capture_resolution_time: false
+
+  performance-optimization:
+    track_metrics: false
+    capture_improvement_percent: false
+
+  security-analysis:
+    track_metrics: false
+    capture_vulnerabilities: false
+
+  api-design-review:
+    track_metrics: false
+    capture_design_score: false
+
+  accessibility-development:
+    track_metrics: false
+    capture_wcag_score: false
+
+  iso-standards-compliance:
+    track_metrics: false
+    capture_quality_score: false
+
+  unit-test-generator:
+    track_metrics: false
+    capture_coverage_improvement: false
+
+# ==============================================================================
+# ALERTS (only for centralized mode)
+# ==============================================================================
+alerts:
+  enabled: false
+
+  slack:
+    enabled: false
+    # webhook_url: Set via SLACK_WEBHOOK_URL environment variable
+    channel: "#claude-code-alerts"
+
+  email:
+    enabled: false
+    # smtp_settings: Set via environment variables
+    recipients:
+      - team@company.com
+
+# ==============================================================================
+# NOTES
+# ==============================================================================
+#
+# GETTING STARTED:
+# ----------------
+# For most organizations starting with Claude Code:
+#   1. Leave metrics_mode: disabled (default)
+#   2. Focus on getting value from the skills first
+#   3. After 3-6 months, consider enabling local metrics
+#   4. Only enable centralized metrics when you have:
+#      - Proven Claude Code value
+#      - Dedicated infrastructure resources
+#      - Executive buy-in for metrics investment
+#
+# ENABLING LOCAL METRICS (Optional, Lightweight):
+# ------------------------------------------------
+#   1. Change metrics_mode to: local
+#   2. Set local_metrics.enabled: true
+#   3. Optionally customize what to track
+#   4. View your local metrics at: ~/.claude/metrics/
+#
+# ENABLING CENTRALIZED METRICS (Advanced, Infrastructure Required):
+# ------------------------------------------------------------------
+#   1. Follow setup guide: metrics-dashboard/README.md
+#   2. Deploy PostgreSQL database
+#   3. Deploy backend API server
+#   4. Deploy frontend dashboard
+#   5. Change metrics_mode to: centralized
+#   6. Set centralized_metrics.enabled: true
+#   7. Configure database connection settings
+#
+# PRIVACY:
+# --------
+# - By default, NO metrics are collected (disabled)
+# - Local mode stores data only on your machine
+# - Centralized mode requires explicit opt-in
+# - You control what data is tracked (see exclude settings)
+# - File contents and user prompts are NEVER logged
+#

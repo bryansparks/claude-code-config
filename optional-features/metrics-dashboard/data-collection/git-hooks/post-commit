@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+# post-commit hook - Send commit data to metrics dashboard
+# This hook runs after a successful commit
+
+# Configuration
+METRICS_API_URL="${METRICS_API_URL:-http://localhost:3001/api}"
+LOG_FILE="${HOME}/.claude/logs/git-metrics.log"
+
+# Get commit information
+COMMIT_SHA=$(git rev-parse HEAD)
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')
+AUTHOR_NAME=$(git log -1 --pretty=format:'%an')
+COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')
+FILES_CHANGED=$(git show --name-only --pretty=format: $COMMIT_SHA | wc -l)
+LINES_ADDED=$(git show --numstat $COMMIT_SHA | awk '{ add += $1 } END { print add }')
+LINES_DELETED=$(git show --numstat $COMMIT_SHA | awk '{ del += $2 } END { print del }')
+
+# Get repository information
+REPO_NAME=$(basename $(git rev-parse --show-toplevel))
+REPO_URL=$(git config --get remote.origin.url)
+
+# Detect if this commit contains test files
+TEST_FILES=$(git show --name-only --pretty=format: $COMMIT_SHA | grep -E '\.(test|spec)\.(ts|js|py|java|go)$' | wc -l)
+
+# Detect if Claude Code was involved (check for specific commit message patterns)
+CLAUDE_INVOLVED=false
+if echo "$COMMIT_MESSAGE" | grep -qiE '(generated with claude|co-authored-by: claude)'; then
+  CLAUDE_INVOLVED=true
+fi
+
+# Create JSON payload
+JSON_PAYLOAD=$(cat <<EOF
+{
+  "event_type": "git_commit",
+  "repository_name": "$REPO_NAME",
+  "repository_url": "$REPO_URL",
+  "branch": "$BRANCH",
+  "commit_sha": "$COMMIT_SHA",
+  "author_email": "$AUTHOR_EMAIL",
+  "author_name": "$AUTHOR_NAME",
+  "commit_message": "$COMMIT_MESSAGE",
+  "files_changed": $FILES_CHANGED,
+  "lines_added": $LINES_ADDED,
+  "lines_deleted": $LINES_DELETED,
+  "test_files_included": $TEST_FILES,
+  "claude_involved": $CLAUDE_INVOLVED,
+  "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+}
+EOF
+)
+
+# Log locally
+mkdir -p "$(dirname "$LOG_FILE")"
+echo "$JSON_PAYLOAD" >> "$LOG_FILE"
+
+# Send to metrics API (silently, don't block commit)
+curl -s -X POST \
+  -H "Content-Type: application/json" \
+  -d "$JSON_PAYLOAD" \
+  "$METRICS_API_URL/events/git-commit" \
+  > /dev/null 2>&1 &
+
+exit 0
