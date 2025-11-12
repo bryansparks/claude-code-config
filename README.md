@@ -7,29 +7,53 @@
 
 ## 🚀 Quick Start
 
-One command installation:
+### Installation (Private Repository)
 
+**Step 1: Clone the repository**
+```bash
+git clone git@github.com:bryansparks/claude-code-config.git
+cd claude-code-config
+```
+
+**Step 2: Run installation for your persona**
 ```bash
 # Software Engineer
-curl -fsSL https://raw.githubusercontent.com/bryansparks/claude-code-config/main/install.sh | bash -s -- engineer
+./install.sh engineer
 
 # QA Engineer
-curl -fsSL https://raw.githubusercontent.com/bryansparks/claude-code-config/main/install.sh | bash -s -- qa
+./install.sh qa
 
 # Product Manager
-curl -fsSL https://raw.githubusercontent.com/bryansparks/claude-code-config/main/install.sh | bash -s -- pm
+./install.sh pm
 
 # Engineering Manager
-curl -fsSL https://raw.githubusercontent.com/bryansparks/claude-code-config/main/install.sh | bash -s -- em
+./install.sh em
 
 # UX Designer
-curl -fsSL https://raw.githubusercontent.com/bryansparks/claude-code-config/main/install.sh | bash -s -- ux
+./install.sh ux
+```
+
+**Step 3: Clean up (optional)**
+```bash
+cd ..
+rm -rf claude-code-config  # Remove cloned repo after installation
 ```
 
 **After installation:**
 1. Restart Claude Code
 2. Try `/init-project` to create a new project
 3. Check MCP servers: `claude mcp list`
+
+### Updating Your Installation
+
+To get the latest updates:
+```bash
+git clone git@github.com:bryansparks/claude-code-config.git
+cd claude-code-config
+./install.sh --update
+cd ..
+rm -rf claude-code-config
+```
 
 ## ✨ Features
 
