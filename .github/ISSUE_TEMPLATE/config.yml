@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Question or Discussion
+    url: https://github.com/bryansparks/claude-code-config/discussions
+    about: Ask questions or discuss ideas with the community
+  - name: Security Vulnerability
+    url: https://github.com/bryansparks/claude-code-config/security/advisories/new
+    about: Report a security vulnerability (private disclosure)
+  - name: Documentation
+    url: https://github.com/bryansparks/claude-code-config/tree/main/docs
+    about: Browse the documentation
