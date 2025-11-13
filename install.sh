@@ -3,6 +3,7 @@
 # One-command installation with persona-specific setup
 #
 # Usage:
+#   cd /path/to/your/project
 #   curl -fsSL https://raw.githubusercontent.com/bryansparks/claude-code-config/main/install.sh | bash -s -- <persona>
 #
 # Personas: engineer | qa | pm | em | ux
@@ -11,6 +12,9 @@
 #   --all          Install all personas
 #   --update       Update existing installation
 #   --uninstall    Remove installation
+#
+# Environment Variables:
+#   CLAUDE_INSTALL_DIR    Override installation directory (default: $PWD/.claude)
 
 set -euo pipefail
 
@@ -23,7 +27,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 REPO_URL="${CLAUDE_CONFIG_REPO:-https://github.com/bryansparks/claude-code-config}"
-INSTALL_DIR="$HOME/.claude"
+INSTALL_DIR="${CLAUDE_INSTALL_DIR:-$PWD/.claude}"
 TMP_DIR="/tmp/claude-config-install-$$"
 VERSION="2.3.0"
 
@@ -154,8 +158,8 @@ install_files() {
 
             # Copy persona skills
             if [ -d "personas/$persona/skills" ]; then
-                mkdir -p "$INSTALL_DIR/skills"
-                cp -r personas/$persona/skills/* "$INSTALL_DIR/skills/" 2>/dev/null || true
+                mkdir -p "$INSTALL_DIR/skills/$persona"
+                cp -r personas/$persona/skills/* "$INSTALL_DIR/skills/$persona/" 2>/dev/null || true
             fi
         fi
     else
@@ -168,8 +172,8 @@ install_files() {
                 cp -r personas/$p/subagents/* "$INSTALL_DIR/agents/$p/" 2>/dev/null || true
                 # Copy skills if they exist
                 if [ -d "personas/$p/skills" ]; then
-                    mkdir -p "$INSTALL_DIR/skills"
-                    cp -r personas/$p/skills/* "$INSTALL_DIR/skills/" 2>/dev/null || true
+                    mkdir -p "$INSTALL_DIR/skills/$p"
+                    cp -r personas/$p/skills/* "$INSTALL_DIR/skills/$p/" 2>/dev/null || true
                 fi
             fi
         done
@@ -253,18 +257,19 @@ install_mcp_servers() {
     fi
 }
 
-# Create symlink to global CLAUDE.md
-setup_global_config() {
-    print_info "Setting up global Claude Code configuration..."
+# Create symlink to project CLAUDE.md
+setup_project_config() {
+    print_info "Setting up project Claude Code configuration..."
 
-    # Symlink to home directory for global access
-    if [ ! -L "$HOME/CLAUDE.md" ] && [ ! -f "$HOME/CLAUDE.md" ]; then
-        ln -s "$INSTALL_DIR/CLAUDE.md" "$HOME/CLAUDE.md"
-        print_success "Global CLAUDE.md symlink created"
-    elif [ -L "$HOME/CLAUDE.md" ]; then
-        print_info "CLAUDE.md symlink already exists"
+    # Get the project directory (parent of .claude)
+    local project_dir="$(dirname "$INSTALL_DIR")"
+
+    # Create CLAUDE.md in project root if it doesn't exist
+    if [ ! -f "$project_dir/CLAUDE.md" ]; then
+        ln -s ".claude/CLAUDE.md" "$project_dir/CLAUDE.md"
+        print_success "Project CLAUDE.md symlink created"
     else
-        print_warning "CLAUDE.md file exists at $HOME (not creating symlink)"
+        print_info "CLAUDE.md already exists in project root"
     fi
 }
 
@@ -278,27 +283,31 @@ cleanup() {
 # Print installation summary
 print_summary() {
     local persona="$1"
+    local project_dir="$(cd "$(dirname "$INSTALL_DIR")" && pwd)"
 
     echo
     echo -e "${GREEN}╔═══════════════════════════════════════════════════════════╗${NC}"
     echo -e "${GREEN}║${NC}  Installation Complete!                                  ${GREEN}║${NC}"
     echo -e "${GREEN}╚═══════════════════════════════════════════════════════════╝${NC}"
     echo
+    print_info "Project directory: $project_dir"
     print_info "Installation directory: $INSTALL_DIR"
     print_info "Active persona: $persona"
     echo
     print_success "Next steps:"
-    echo "  1. Restart Claude Code to load new configuration"
-    echo "  2. Try: /init-project to create a new project"
-    echo "  3. Check MCP servers: claude mcp list"
+    echo "  1. Open Claude Code in this directory: cd $project_dir"
+    echo "  2. Configuration will auto-load from CLAUDE.md"
+    echo "  3. Try persona commands (check .claude/commands/)"
     echo
-    print_info "Documentation: $INSTALL_DIR/../docs/"
-    print_info "Configuration: $INSTALL_DIR/CLAUDE.md"
+    print_info "Project config: $project_dir/CLAUDE.md"
+    print_info "Agents: $INSTALL_DIR/agents/$persona/"
+    print_info "Skills: $INSTALL_DIR/skills/$persona/"
     echo
 }
 
 # Uninstall
 uninstall() {
+    local project_dir="$(dirname "$INSTALL_DIR")"
     print_warning "Uninstalling Claude Code configuration..."
 
     if [ -d "$INSTALL_DIR" ]; then
@@ -307,7 +316,10 @@ uninstall() {
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             backup_existing
             rm -rf "$INSTALL_DIR"
-            rm -f "$HOME/CLAUDE.md"
+            # Remove CLAUDE.md symlink if it exists in project root
+            if [ -L "$project_dir/CLAUDE.md" ]; then
+                rm -f "$project_dir/CLAUDE.md"
+            fi
             print_success "Uninstallation complete"
         else
             print_info "Uninstall cancelled"
@@ -394,7 +406,7 @@ main() {
     create_claude_md
     set_persona "$persona"
     install_mcp_servers "$persona"
-    setup_global_config
+    setup_project_config
     cleanup
     print_summary "$persona"
 }

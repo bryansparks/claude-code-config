@@ -108,9 +108,9 @@ Choose **UX Designer** if you:
 
 **Need Help?**
 - [Quick Start Guide](docs/QUICK_START.md) - 5-minute walkthrough
-- [Skills Guide](SKILLS.md) - How Skills work (Engineer)
+- [Skills Guide](docs/SKILLS.md) - How Skills work (Engineer)
 - [PM Skills Guide](docs/PM_SKILLS_GUIDE.md) - PM-specific guidance
-- [MCP Servers Guide](MCP_SERVERS_BY_PERSONA.md) - Tool integrations
+- [MCP Servers Guide](docs/MCP_SERVERS_BY_PERSONA.md) - Tool integrations
 
 ---
 
@@ -644,14 +644,13 @@ local_metrics:
 - **[Workflow Examples](docs/WORKFLOW_EXAMPLES.md)** - Real-world usage scenarios
 
 ### MCP Server Guides
-- **[MCP Servers by Persona](MCP_SERVERS_BY_PERSONA.md)** - Complete server reference (70+ pages)
-- **[MCP Installation Guide](docs/MCP_INSTALLATION.md)** - Setup and configuration
+- **[MCP Servers by Persona](docs/MCP_SERVERS_BY_PERSONA.md)** - Complete server reference (70+ pages)
+- **[MCP Installation Reference](docs/MCP_INSTALLATION_REFERENCE.md)** - Detailed installation guide
 - **[MCP Server Details](docs/MCP_SERVERS.md)** - Individual server documentation
 
 ### Organization Deployment
-- **[Organization Setup Guide](ORGANIZATION_DEPLOYMENT_GUIDE.md)** - Deploy to your company
-- **[Organization Migration](COPY_TO_ORGANIZATION.md)** - Fork for your org
 - **[Secrets Management](docs/SECRETS_MANAGEMENT.md)** - Handling API keys securely
+- **[Skills Guide](docs/SKILLS.md)** - Auto-invoked task assistance
 
 ### Advanced Topics
 - **[Metrics Decision Guide](docs/METRICS_DECISION_GUIDE.md)** - Should you enable metrics?
