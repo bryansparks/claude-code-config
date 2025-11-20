@@ -230,19 +230,31 @@ curl -fsSL https://raw.githubusercontent.com/bryansparks/claude-code-config/main
 # Skills are copied to ~/.claude/skills/
 ```
 
-## Roadmap: Skills for Other Personas
+## Skills for Other Personas
+
+### QA Persona (5 Skills Available)
+
+**✓ test-automation** - Automated test generation from requirements
+**✓ accessibility-audit** - WCAG compliance checking with Axe-core
+**✓ bug-analysis** - Systematic bug investigation and root cause analysis
+**✓ visual-regression** - UI change detection and screenshot comparison
+**✓ fact-check** ✨ NEW! - Quick verification of responses for accuracy
+
+**Fact-Check Skill Highlights:**
+- Auto-activates on: "verify", "is this correct", "are you sure"
+- Verifies claims against codebase in 30-60 seconds
+- Provides confidence scores (High/Medium/Low)
+- Cites exact file:line references
+- Commands: `/verify-response`, `/fact-check [claim]`
+
+### PM Persona (4 Skills Available)
+
+**✓ prd-guide** - Interactive 7-step PRD creation wizard
+**✓ success-criteria-builder** - Converts vague goals to SMART metrics
+**✓ requirements-refiner** - Detects vague language, ensures precision
+**✓ ai-solution-ideation** - Explores AI/ML opportunities with cost estimates
 
 ### Coming Soon
-
-**QA Persona:**
-- `test-automation` - Automated test generation
-- `accessibility-audit` - WCAG compliance checking
-- `visual-regression` - UI change detection
-
-**PM Persona:**
-- `user-story-generator` - Well-structured user stories
-- `requirements-analysis` - Requirement validation
-- `feature-prioritization` - RICE framework application
 
 **EM Persona:**
 - `technical-debt-assessment` - Debt identification and prioritization

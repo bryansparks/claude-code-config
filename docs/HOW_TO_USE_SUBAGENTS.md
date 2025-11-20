@@ -234,7 +234,7 @@ Recommendations:
 
 ---
 
-## QA Subagents (5 total)
+## QA Subagents (6 total)
 
 ### 1. 🤖 Test Automation Specialist
 **Location**: `personas/qa/subagents/test-automation-specialist.md`
@@ -412,6 +412,58 @@ Why? → Recent refactoring removed explicit commit
 
 ---
 
+### 6. 🔎 Cross-Checker ✨ NEW!
+**Location**: `personas/qa/subagents/cross-checker.md`
+
+**Expertise:**
+- Response accuracy verification
+- Technical claim validation
+- Multi-source evidence gathering
+- Code pattern analysis and confirmation
+- Test-driven verification
+- Documentation consistency checking
+- Confidence scoring (High/Medium/Low)
+
+**Example prompts:**
+- "Verify this explanation about the authentication flow"
+- "Is this claim about the database configuration correct?"
+- "Cross-check this architectural description"
+- "Validate these claims about API behavior"
+
+**Output example:**
+```
+[CROSS-CHECKER] 🔎 Verification Report
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Claim: "Authentication uses JWT with Redis refresh tokens"
+
+Verification Summary:
+✅ JWT usage: VERIFIED (src/auth/token.ts:34)
+✅ Redis refresh tokens: VERIFIED (src/auth/refresh.ts:67)
+
+Evidence:
+  ✓ package.json: jsonwebtoken@9.0.0
+  ✓ package.json: redis@4.5.0
+  ✓ src/auth/token.ts:34: jwt.sign()
+  ✓ src/auth/refresh.ts:67: redis.set('refresh:...')
+
+Overall Confidence: 🟢 HIGH (100% verified)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**When to use:**
+- Verifying complex technical claims
+- Fact-checking Claude's responses
+- Multi-component system verification
+- When you need evidence-based confirmation
+
+**How it's invoked:**
+- Auto-escalated by the fact-check skill for complex claims
+- User requests `/verify-response --deep`
+- Architectural or integration verification needs
+
+---
+
 ## How Subagents Work
 
 ### Automatic Invocation
@@ -484,6 +536,7 @@ Each subagent identifies itself with a unique prefix:
 - `[ACCESSIBILITY-AUDITOR] ♿`
 - `[PERFORMANCE-TESTER] ⚡`
 - `[VISUAL-REGRESSION] 👁️`
+- `[CROSS-CHECKER] 🔎` ✨ NEW!
 
 This helps you know which expert is responding.
 

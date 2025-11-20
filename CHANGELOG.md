@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Response Verification System** for accuracy checking:
+  - `fact-check` skill for QA persona - Auto-invoked verification in 30-60 seconds
+  - `/verify-response` command - Verify last Claude response
+  - `/fact-check [claim]` command - Verify specific claims
+  - Cross-Checker subagent for deep multi-component verification (2-5 min)
+  - Confidence scoring system (High/Medium/Low)
+  - Evidence-based citations with file:line references
+  - Auto-invocation on keywords: "verify", "is this correct", "are you sure"
 - LICENSE file (MIT License)
 - CONTRIBUTING.md with contribution guidelines
 - SECURITY.md with security policy and reporting process
@@ -15,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub issue templates (bug report, feature request)
 - GitHub pull request template
 - CHANGELOG.md (this file)
+
+### Changed
+- Updated QA persona from 4 skills to 5 skills (added fact-check)
+- Updated total auto-invoked skills from 16 to 17 across all personas
+- Enhanced documentation with verification system details in README and guides
 
 ## [2.3.0] - 2025-11-12
 

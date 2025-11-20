@@ -127,9 +127,10 @@ rm -rf claude-code-config
 
 ## ✨ Features
 
-- **🎭 5 Persona Configurations**: Engineer (8 skills), QA (4 skills), PM (4 skills + 4 commands), EM, UX
-- **🧠 Auto-Invoked Skills**: 16 intelligent assistants that activate automatically
+- **🎭 5 Persona Configurations**: Engineer (8 skills), QA (5 skills), PM (4 skills + 4 commands), EM, UX
+- **🧠 Auto-Invoked Skills**: 17 intelligent assistants that activate automatically
 - **🔌 Persona-Specific MCP Bundles**: 6-7 optimized servers per role (GitHub, Linear, PostHog, Figma, etc.)
+- **✓ Response Verification**: Claude fact-checks its own responses for accuracy (30-60 sec)
 - **🤖 AI-First Approach**: Always explore AI solutions (LLMs, ML, Computer Vision) with cost estimates
 - **📚 Vision-Driven Development**: PROJECT.md + VISION.md + ORGANIZATION.md three-tier architecture
 - **🛡️ Enterprise Standards**: OWASP Top 10, WCAG 2.1, ISO/IEC 25010, TDD built-in
@@ -144,7 +145,7 @@ Choose the persona that matches your role for optimized workflows, MCP servers, 
 | Persona | MCP Servers | Skills | Focus Areas |
 |---------|-------------|--------|-------------|
 | **Software Engineer** | 7 | 8 | Code review, debugging, performance, API design |
-| **QA Engineer** | 7 | 4 | Test automation, accessibility, visual regression |
+| **QA Engineer** | 7 | 5 | Test automation, accessibility, visual regression, verification |
 | **Product Manager** | 7 | 4 | PRD creation, success metrics, AI ideation |
 | **Engineering Manager** | 7 | Coming soon | DORA metrics, team performance, capacity planning |
 | **UX Designer** | 6 | Coming soon | Design systems, accessibility, responsive design |
@@ -184,11 +185,12 @@ Choose the persona that matches your role for optimized workflows, MCP servers, 
 
 **What you get:**
 - **7 MCP Servers**: Playwright (E2E testing), GitHub, Filesystem, A11y MCP (WCAG), Memory, Sequential-thinking, PostgreSQL
-- **4 Auto-Invoked Skills**:
+- **5 Auto-Invoked Skills**:
   - 🎭 Accessibility Audit - WCAG 2.0/2.1/2.2 compliance with Axe-core
   - 🐛 Bug Analysis - Systematic bug investigation and reproduction
   - 🤖 Test Automation - E2E test generation and coverage analysis
   - 👁️ Visual Regression - Screenshot comparison and UI validation
+  - ✓ **Fact-Check** ✨ NEW! - Verify Claude's responses for accuracy (30-60 sec)
 
 **Key Workflows:**
 - Create Playwright E2E tests from user stories
@@ -196,6 +198,7 @@ Choose the persona that matches your role for optimized workflows, MCP servers, 
 - Generate test plans and strategies
 - Set up test data in databases
 - Visual regression testing across browsers
+- **Verify technical claims** against codebase with `/verify-response`
 
 **Best for:** QA teams focusing on test automation, accessibility, and quality assurance
 
@@ -317,7 +320,7 @@ Choose the persona that matches your role for optimized workflows, MCP servers, 
 | 🏗️ **api-design-review** | API endpoints | RESTful best practices, OpenAPI |
 | 📐 **iso-standards-compliance** | Architecture discussions | ISO/IEC 25010 quality model |
 
-### 🧪 QA Engineer Skills (4 Skills)
+### 🧪 QA Engineer Skills (5 Skills)
 
 | Skill | Triggers | What It Does |
 |-------|----------|--------------|
@@ -325,6 +328,7 @@ Choose the persona that matches your role for optimized workflows, MCP servers, 
 | 🐛 **bug-analysis** | Bug investigation | Systematic reproduction and root cause |
 | 🤖 **test-automation** | Test creation | E2E test generation, coverage gaps |
 | 👁️ **visual-regression** | UI testing | Screenshot comparison, visual validation |
+| ✓ **fact-check** ✨ NEW! | "Verify", "is this correct" | Quick accuracy verification with confidence scores |
 
 ### 📋 Product Manager Skills (4 Skills) ✨ NEW!
 
@@ -361,6 +365,93 @@ Also, have you considered AI?
 - ✅ Validate completeness before you proceed
 
 [Engineer Skills Guide →](SKILLS.md) | [PM Skills Guide →](docs/PM_SKILLS_GUIDE.md)
+
+---
+
+## ✓ Response Verification System ✨ NEW!
+
+**Ensure accuracy of Claude's technical responses** with built-in fact-checking capabilities.
+
+### How It Works
+
+Claude can now **verify its own responses** by cross-checking claims against your codebase, documentation, and tests in 30-60 seconds.
+
+**Auto-Invoke (Keywords):**
+```
+You: "Is this correct? The auth is in src/auth/login.ts"
+→ Fact-Check skill auto-invokes
+→ Verifies claim against codebase
+→ Returns: ✅ VERIFIED (src/auth/login.ts:1-145)
+```
+
+**Manual Commands:**
+```bash
+/verify-response              # Verify last Claude response
+/fact-check [specific claim]  # Verify a single claim
+```
+
+### What Gets Verified
+
+- ✓ **File locations and paths** - "The config is in config/database.ts"
+- ✓ **Function signatures** - "authenticate() accepts email and password"
+- ✓ **Configuration values** - "Rate limit is 100 requests per minute"
+- ✓ **Technology claims** - "Uses PostgreSQL with connection pooling"
+- ✓ **Architectural patterns** - "Follows MVC pattern"
+- ✓ **Behavior descriptions** - "Retries failed requests 3 times"
+
+### Confidence Scoring
+
+Every verification includes a confidence score:
+
+- 🟢 **HIGH (90-100%)** - Direct code match, multiple sources confirm
+- 🟡 **MEDIUM (60-89%)** - Single source, logical inference supported
+- 🔴 **LOW (0-59%)** - Cannot verify or contradictory evidence found
+
+### Example Output
+
+```markdown
+✓ RESPONSE VERIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ File location: src/auth/login.ts - VERIFIED
+✓ Uses JWT tokens - VERIFIED (line 34: jwt.sign())
+✗ Token expires in 1 hour - INCORRECT
+
+Correction:
+❌ Claimed: Expires in 1 hour
+✓ Actual: Expires in 30 minutes (config/auth.ts:23)
+
+Overall Confidence: 🟡 MEDIUM (67% verified)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Components
+
+**Fact-Check Skill** (Auto-invoked)
+- Triggers on "verify", "is this correct", "are you sure"
+- Quick 30-60 second verification
+- Uses Grep/Read for code checks
+- Provides confidence scores with file:line citations
+
+**Cross-Checker Subagent** (Deep Analysis)
+- Handles complex multi-component claims
+- 2-5 minute comprehensive analysis
+- Evidence triangulation from code/tests/docs
+- Detailed verification reports
+
+**Commands**
+- `/verify-response` - Check last Claude response
+- `/fact-check [claim]` - Verify specific statement
+
+### Benefits
+
+✅ **Trust but verify** - Catch inaccuracies before they cause issues
+✅ **Fast** - 30-60 seconds vs 5-10 minutes manual checking
+✅ **Evidence-based** - Every claim cited with file:line references
+✅ **Confidence scoring** - Clear about certainty levels
+✅ **Self-improving** - Claude learns from verification patterns
+
+**Available in:** QA persona (all users benefit from verification)
 
 ---
 

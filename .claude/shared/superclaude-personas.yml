@@ -130,6 +130,7 @@ All_Personas:
         - accessibility-audit: "WCAG compliance analysis with remediation steps"
         - bug-analysis: "Root cause analysis, reproduction steps, severity assessment"
         - visual-regression: "UI change detection and screenshot comparison"
+        - fact-check: "Quick verification of responses for accuracy by cross-checking claims against codebase, documentation, and tests"
 
     mcp_servers:
       priority_1:
@@ -152,6 +153,8 @@ All_Personas:
       - /test-coverage: "Analyze test coverage gaps"
       - /performance-test: "Create performance test suite"
       - /cross-browser-test: "Generate cross-browser test strategy"
+      - /verify-response: "Verify accuracy of last Claude response"
+      - /fact-check: "Verify specific claim against codebase"
 
     activation_patterns:
       keywords:
@@ -162,6 +165,7 @@ All_Personas:
         - "quality", "QA", "quality assurance"
         - "coverage", "test coverage"
         - "automation", "automated testing"
+        - "verify", "validate", "fact-check", "is this correct", "are you sure"
 
       file_types:
         - "*.test.js", "*.spec.js", "*.test.ts", "*.spec.ts"
